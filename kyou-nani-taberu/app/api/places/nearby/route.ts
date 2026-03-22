@@ -27,12 +27,22 @@ function mapPriceLevel(level: string | undefined): number {
   }
 }
 
+// Map locale to Google API languageCode
+function toLanguageCode(locale: string): string {
+  switch (locale) {
+    case "zh-CN": return "zh-CN";
+    case "zh-TW": return "zh-TW";
+    default: return locale;
+  }
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const lat = searchParams.get("lat");
   const lng = searchParams.get("lng");
   const radius = searchParams.get("radius") || "1000";
   const keyword = searchParams.get("keyword");
+  const locale = searchParams.get("locale") || "ja";
 
   if (!lat || !lng) {
     return NextResponse.json({ error: "lat and lng are required" }, { status: 400 });
@@ -47,6 +57,7 @@ export async function GET(request: NextRequest) {
     const body: Record<string, unknown> = {
       includedTypes: ["restaurant"],
       maxResultCount: 20,
+      languageCode: toLanguageCode(locale),
       locationRestriction: {
         circle: {
           center: {
@@ -100,16 +111,17 @@ export async function GET(request: NextRequest) {
         address: p.formattedAddress || "",
         lat: loc?.latitude || 0,
         lng: loc?.longitude || 0,
-        rating: (p.rating as number) || 0,
-        user_ratings_total: (p.userRatingCount as number) || 0,
+        rating: (p.rating as number) || null,
+        user_ratings_total: (p.userRatingCount as number) || null,
         price_level: mapPriceLevel(p.priceLevel as string | undefined),
-        is_open_now: openingHours?.openNow ?? false,
+        is_open_now: openingHours?.openNow ?? null,
         opening_hours_text: openingHours?.weekdayDescriptions?.join(" / ") || "",
         close_day: "なし",
         phone: (p.nationalPhoneNumber as string) || null,
-        google_maps_url: (p.googleMapsUri as string) || "",
+        google_maps_url: (p.googleMapsUri as string) || null,
         primary_type: primaryType,
-        genre: TYPE_TO_GENRE[primaryType] || "レストラン",
+        genre: TYPE_TO_GENRE[primaryType] || "restaurant",
+        data_source: "google",
       };
     });
 

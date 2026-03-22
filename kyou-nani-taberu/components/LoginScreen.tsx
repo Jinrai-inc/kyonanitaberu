@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { GoogleIcon, AppleIcon, LINEIcon, XTwitterIcon, GuestIcon } from "./icons/AuthIcons";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 interface LoginScreenProps {
   onLogin: (method: string) => void;
@@ -9,6 +11,7 @@ interface LoginScreenProps {
 
 export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [leaving, setLeaving] = useState(false);
+  const t = useTranslations();
 
   const go = (method: string) => {
     setLeaving(true);
@@ -64,6 +67,11 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           boxShadow: "0 8px 40px rgba(0,0,0,0.06)",
         }}
       >
+        {/* Language switcher */}
+        <div className="absolute top-[14px] right-[16px]">
+          <LanguageSwitcher />
+        </div>
+
         {/* Brand */}
         <div className="mb-4">
           <svg width="52" height="52" viewBox="0 0 56 56" fill="none">
@@ -77,19 +85,19 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           className="text-2xl"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
-          今日何食べる？
+          {t("app.name")}
         </h1>
         <p
           className="text-[11px] mt-[2px]"
           style={{ color: "var(--ink4)", letterSpacing: "1px" }}
         >
-          What do you want to eat today
+          {t("app.subtitle")}
         </p>
         <p
-          className="text-[12.5px] leading-[1.7] mt-4 mb-6"
+          className="text-[12.5px] leading-[1.7] mt-4 mb-6 whitespace-pre-line"
           style={{ color: "var(--ink3)" }}
         >
-          現在地から近くのお店をサクッと探して、<br />迷ったらルーレットでおまかせ。
+          {t("app.description")}
         </p>
 
         {/* Auth buttons */}
@@ -106,7 +114,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             }}
           >
             <GoogleIcon size={20} />
-            <span>Googleで続ける</span>
+            <span>{t("login.google")}</span>
           </button>
 
           <button
@@ -121,7 +129,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             }}
           >
             <AppleIcon size={20} />
-            <span>Appleで続ける</span>
+            <span>{t("login.apple")}</span>
           </button>
 
           <button
@@ -136,7 +144,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             }}
           >
             <LINEIcon size={20} />
-            <span>LINEで続ける</span>
+            <span>{t("login.line")}</span>
           </button>
 
           <button
@@ -151,14 +159,14 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             }}
           >
             <XTwitterIcon size={18} />
-            <span>Xで続ける</span>
+            <span>{t("login.x")}</span>
           </button>
         </div>
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-[18px]" style={{ color: "var(--ink4)", fontSize: 12 }}>
           <div className="flex-1 h-px" style={{ background: "var(--border)" }} />
-          <span>or</span>
+          <span>{t("login.or")}</span>
           <div className="flex-1 h-px" style={{ background: "var(--border)" }} />
         </div>
 
@@ -175,15 +183,18 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           }}
         >
           <GuestIcon size={20} />
-          <span>ゲストで始める</span>
+          <span>{t("login.guest")}</span>
         </button>
 
         <p className="text-[10px] mt-[18px] leading-[1.6]" style={{ color: "var(--ink4)" }}>
-          続行することで
-          <a href="#" className="underline" style={{ color: "var(--ink3)" }}>利用規約</a>
-          と
-          <a href="#" className="underline" style={{ color: "var(--ink3)" }}>プライバシーポリシー</a>
-          に同意します
+          {t.rich("login.terms", {
+            terms: (chunks) => (
+              <a href="#" className="underline" style={{ color: "var(--ink3)" }}>{chunks}</a>
+            ),
+            privacy: (chunks) => (
+              <a href="#" className="underline" style={{ color: "var(--ink3)" }}>{chunks}</a>
+            ),
+          })}
         </p>
       </div>
     </div>

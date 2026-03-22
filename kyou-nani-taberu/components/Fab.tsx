@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { Dice } from "./icons/UiIcons";
 
 interface FabProps {
@@ -8,6 +9,8 @@ interface FabProps {
 }
 
 export default function Fab({ onClick }: FabProps) {
+  const t = useTranslations("roulette");
+
   return (
     <button
       onClick={onClick}
@@ -24,7 +27,7 @@ export default function Fab({ onClick }: FabProps) {
         animationDelay: "300ms",
       }}
     >
-      <Dice size={18} /> 迷ったらコレ
+      <Dice size={18} /> {t("fab")}
     </button>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import type { Place, TransportMode, SortBy } from "@/types/place";
 import { MapPin } from "./icons/UiIcons";
 import ShopCard from "./ShopCard";
@@ -11,9 +12,12 @@ interface ShopListProps {
   sortBy: SortBy;
   onSortChange: (sort: SortBy) => void;
   onlyOpen: boolean;
+  locale: string;
 }
 
-export default function ShopList({ shops, mode, sortBy, onSortChange, onlyOpen }: ShopListProps) {
+export default function ShopList({ shops, mode, sortBy, onSortChange, onlyOpen, locale }: ShopListProps) {
+  const t = useTranslations("results");
+
   return (
     <>
       {/* Result bar */}
@@ -30,7 +34,11 @@ export default function ShopList({ shops, mode, sortBy, onSortChange, onlyOpen }
           >
             {shops.length}
           </em>
-          件{onlyOpen ? " (営業中)" : ""}
+          {" "}
+          {onlyOpen
+            ? t("countOpen", { count: "" }).replace(/^\s*/, "")
+            : t("count", { count: "" }).replace(/^\s*/, "")
+          }
         </span>
         <div
           className="flex gap-[3px]"
@@ -52,7 +60,7 @@ export default function ShopList({ shops, mode, sortBy, onSortChange, onlyOpen }
                 boxShadow: sortBy === s ? "0 1px 4px rgba(0,0,0,0.06)" : "none",
               }}
             >
-              {s === "rating" ? "評価順" : "近い順"}
+              {s === "rating" ? t("sortRating") : t("sortDistance")}
             </button>
           ))}
         </div>
@@ -62,17 +70,16 @@ export default function ShopList({ shops, mode, sortBy, onSortChange, onlyOpen }
       <div className="grid gap-[10px]">
         {shops.length > 0 ? (
           shops.map((shop, i) => (
-            <ShopCard key={shop.place_id} shop={shop} mode={mode} delay={i * 35} />
+            <ShopCard key={shop.place_id} shop={shop} mode={mode} delay={i * 35} locale={locale} />
           ))
         ) : (
           <div className="text-center py-10 animate-fadeIn">
             <MapPin size={40} color="var(--ink4)" />
             <p className="text-sm font-bold mt-3" style={{ color: "var(--ink3)" }}>
-              条件に合うお店がみつかりません
+              {t("empty")}
             </p>
             <p className="text-xs mt-1" style={{ color: "var(--ink4)" }}>
-              {onlyOpen ? "「今あいてるお店だけ」をOFFにするか、" : ""}
-              時間やジャンルを変えてみてね
+              {onlyOpen ? t("emptyHintOpen") : t("emptyHint")}
             </p>
           </div>
         )}

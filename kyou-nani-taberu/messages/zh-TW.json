@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "今天吃什麼？",
+    "subtitle": "在日本尋找附近的餐廳",
+    "description": "快速搜尋附近餐廳，\n猶豫不決？讓轉盤幫你選！"
+  },
+  "login": {
+    "google": "使用Google繼續",
+    "apple": "使用Apple繼續",
+    "line": "使用LINE繼續",
+    "x": "使用X繼續",
+    "guest": "訪客模式",
+    "or": "或",
+    "terms": "繼續即表示您同意<terms>使用條款</terms>和<privacy>隱私政策</privacy>",
+    "termsLink": "使用條款",
+    "privacyLink": "隱私政策"
+  },
+  "location": {
+    "getLocation": "搜尋附近餐廳",
+    "locating": "定位中...",
+    "demo": "橫濱站附近（示範）",
+    "retry": "重試",
+    "error": "無法取得位置資訊"
+  },
+  "transport": {
+    "label": "交通方式",
+    "walk": "步行",
+    "bike": "騎車",
+    "car": "開車"
+  },
+  "time": {
+    "label": "幾分鐘以內？"
+  },
+  "nowOpen": {
+    "title": "僅顯示營業中",
+    "sub": "現在 {time}・{count}家營業中"
+  },
+  "genre": {
+    "label": "菜系",
+    "reset": "重置",
+    "japanese": "日本料理",
+    "izakaya": "居酒屋",
+    "ramen": "拉麵",
+    "cafe": "咖啡廳",
+    "italian": "義大利料理",
+    "yakiniku": "燒肉",
+    "chinese": "中餐",
+    "bar": "酒吧",
+    "sushi": "壽司",
+    "curry": "咖哩",
+    "western": "西餐",
+    "korean": "韓國料理",
+    "french": "法國料理",
+    "thai": "泰國料理",
+    "mexican": "墨西哥料理",
+    "okonomiyaki": "大阪燒",
+    "creative": "創意料理",
+    "restaurant": "餐廳"
+  },
+  "results": {
+    "count": "{count} 家",
+    "countOpen": "{count} 家（營業中）",
+    "sortRating": "評分排序",
+    "sortDistance": "距離排序",
+    "empty": "沒有符合條件的餐廳",
+    "emptyHint": "試試調整時間或菜系篩選",
+    "emptyHintOpen": "關閉「僅顯示營業中」或增加交通時間試試"
+  },
+  "card": {
+    "minutes": "{min}分鐘",
+    "open": "營業中",
+    "closed": "公休日",
+    "outside": "未營業",
+    "unknown": "營業時間不明",
+    "closedDay": "定休日：{day}",
+    "reviews": "{count}則評價",
+    "googleReview": "查看評價",
+    "route": "導航前往",
+    "noRating": "尚無評分"
+  },
+  "roulette": {
+    "title": "今天就吃這個！",
+    "idle": "點擊開始",
+    "spinning": "選擇中…",
+    "restart": "再轉一次",
+    "start": "開始",
+    "fab": "選不了？"
+  },
+  "credit": {
+    "text": "餐廳資訊由 Google Maps Platform 提供，地圖由 Apple MapKit 提供"
+  },
+  "meta": {
+    "title": "今天吃什麼？ - 在日本尋找附近的餐廳",
+    "description": "快速搜尋附近餐廳，猶豫不決？讓轉盤幫你選！"
+  }
+}

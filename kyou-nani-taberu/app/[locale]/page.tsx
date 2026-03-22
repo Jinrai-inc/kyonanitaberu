@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { TransportMode, SortBy } from "@/types/place";
 import { MOCK_SHOPS } from "@/lib/mockData";
-import { ALL_GENRES } from "@/lib/genreMap";
+import { ALL_GENRE_KEYS } from "@/lib/genreMap";
 import { getTimeKey } from "@/lib/radiusCalc";
 import { isOpenNow, isClosedToday, getTime } from "@/lib/timeUtils";
 
@@ -19,6 +20,8 @@ import Roulette from "@/components/Roulette";
 import Fab from "@/components/Fab";
 
 export default function Home() {
+  const locale = useLocale();
+  const t = useTranslations("credit");
   const [auth, setAuth] = useState<string | null>(null);
   const [mode, setMode] = useState<TransportMode>("walk");
   const [maxTime, setMaxTime] = useState(10);
@@ -39,25 +42,25 @@ export default function Home() {
   const filteredShops = useMemo(() => {
     let list = MOCK_SHOPS.filter((s) => (s[tk] ?? 0) <= maxTime);
     if (genres.length) list = list.filter((s) => genres.includes(s.genre));
-    if (onlyOpen) list = list.filter((s) => !isClosedToday(s.close_day) && isOpenNow(s.opening_hours_text));
+    if (onlyOpen) list = list.filter((s) => !isClosedToday(s.close_day, locale) && isOpenNow(s.opening_hours_text));
 
     return [...list].sort((a, b) => {
-      if (sortBy === "rating") return b.rating - a.rating;
+      if (sortBy === "rating") return (b.rating ?? 0) - (a.rating ?? 0);
       return (a[tk] ?? 0) - (b[tk] ?? 0);
     });
-  }, [mode, maxTime, genres, onlyOpen, sortBy, tk]);
+  }, [mode, maxTime, genres, onlyOpen, sortBy, tk, locale]);
 
   const openCount = useMemo(() => {
     return MOCK_SHOPS.filter(
-      (s) => (s[tk] ?? 0) <= maxTime && !isClosedToday(s.close_day) && isOpenNow(s.opening_hours_text)
+      (s) => (s[tk] ?? 0) <= maxTime && !isClosedToday(s.close_day, locale) && isOpenNow(s.opening_hours_text)
     ).length;
-  }, [maxTime, tk]);
+  }, [maxTime, tk, locale]);
 
   const availableGenres = useMemo(() => {
     const genresInRange = new Set(
       MOCK_SHOPS.filter((s) => (s[tk] ?? 0) <= maxTime).map((s) => s.genre)
     );
-    return ALL_GENRES.filter((g) => genresInRange.has(g));
+    return ALL_GENRE_KEYS.filter((g) => genresInRange.has(g));
   }, [maxTime, tk]);
 
   if (!auth) {
@@ -99,7 +102,7 @@ export default function Home() {
                 openCount={openCount}
               />
               <GenreFilter
-                allGenres={availableGenres}
+                allGenres={availableGenres as unknown as string[]}
                 selected={genres}
                 onChange={setGenres}
               />
@@ -109,22 +112,14 @@ export default function Home() {
                 sortBy={sortBy}
                 onSortChange={setSortBy}
                 onlyOpen={onlyOpen}
+                locale={locale}
               />
 
               <div
                 className="text-center text-[10px] mt-6 pt-3"
                 style={{ color: "var(--ink4)", borderTop: "1px solid var(--border)" }}
               >
-                店舗情報は{" "}
-                <a
-                  href="https://cloud.google.com/maps-platform"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ color: "var(--ink3)" }}
-                >
-                  Google Maps Platform
-                </a>{" "}
-                を利用しています
+                {t("text")}
               </div>
 
               {filteredShops.length > 0 && (

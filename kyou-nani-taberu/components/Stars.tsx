@@ -1,13 +1,24 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 
 interface StarsProps {
-  rating: number;
+  rating: number | null;
   count: number | null;
 }
 
 export default function Stars({ rating, count }: StarsProps) {
+  const t = useTranslations("card");
+
+  if (rating == null || rating === 0) {
+    return (
+      <span className="text-[10px]" style={{ color: "var(--ink4)" }}>
+        {t("noRating")}
+      </span>
+    );
+  }
+
   return (
     <div className="flex items-center gap-1">
       <div className="flex gap-[1px]">
@@ -35,7 +46,7 @@ export default function Stars({ rating, count }: StarsProps) {
       </span>
       {count != null && (
         <span className="text-[10px]" style={{ color: "var(--ink3)" }}>
-          ({count}件)
+          ({t("reviews", { count })})
         </span>
       )}
     </div>

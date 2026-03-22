@@ -1,13 +1,14 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import type { TransportMode } from "@/types/place";
 import { Walk, Bike, Car } from "./icons/TransportIcons";
 
-const TRANSPORTS: { id: TransportMode; label: string; Icon: React.FC<{ size?: number; className?: string }> }[] = [
-  { id: "walk", label: "徒歩", Icon: Walk },
-  { id: "bike", label: "自転車", Icon: Bike },
-  { id: "car", label: "クルマ", Icon: Car },
+const TRANSPORTS: { id: TransportMode; key: string; Icon: React.FC<{ size?: number; className?: string }> }[] = [
+  { id: "walk", key: "walk", Icon: Walk },
+  { id: "bike", key: "bike", Icon: Bike },
+  { id: "car", key: "car", Icon: Car },
 ];
 
 interface TransportSelectorProps {
@@ -16,16 +17,18 @@ interface TransportSelectorProps {
 }
 
 export default function TransportSelector({ mode, onChange }: TransportSelectorProps) {
+  const t = useTranslations("transport");
+
   return (
     <section className="mb-5 animate-fadeUp" style={{ animationDelay: "50ms" }}>
       <span
         className="text-[10.5px] font-extrabold block mb-[10px] uppercase"
         style={{ color: "var(--ink4)", letterSpacing: "1.6px" }}
       >
-        移動手段
+        {t("label")}
       </span>
       <div className="flex gap-[10px]">
-        {TRANSPORTS.map(({ id, label, Icon }) => (
+        {TRANSPORTS.map(({ id, key, Icon }) => (
           <button
             key={id}
             onClick={() => onChange(id)}
@@ -49,7 +52,7 @@ export default function TransportSelector({ mode, onChange }: TransportSelectorP
                 color: mode === id ? "var(--accent)" : "var(--ink4)",
               }}
             >
-              {label}
+              {t(key)}
             </span>
           </button>
         ))}

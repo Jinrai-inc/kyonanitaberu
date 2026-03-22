@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import type { Place } from "@/types/place";
 import { XIcon, MapPin, Navigation } from "./icons/UiIcons";
 import { GenreIcon } from "./icons/GenreIcons";
@@ -17,6 +18,9 @@ export default function Roulette({ items, onClose }: RouletteProps) {
   const [result, setResult] = useState<Place | null>(null);
   const [idx, setIdx] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const t = useTranslations("roulette");
+  const tCard = useTranslations("card");
+  const tGenre = useTranslations("genre");
 
   const spin = useCallback(() => {
     if (spinning || !items.length) return;
@@ -64,6 +68,8 @@ export default function Roulette({ items, onClose }: RouletteProps) {
     ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(result.name + " " + result.address)}`
     : "";
 
+  const getGenreLabel = (genre: string) => tGenre.has(genre) ? tGenre(genre) : genre;
+
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-[1000] animate-fadeIn"
@@ -95,7 +101,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
           className="text-xl font-semibold"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
-          今日はこれ食べよ！
+          {t("title")}
         </h2>
 
         {/* Display area */}
@@ -111,7 +117,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
         >
           {!result && !spinning && (
             <span className="text-[13px]" style={{ color: "var(--ink4)" }}>
-              タップしてスタート
+              {t("idle")}
             </span>
           )}
 
@@ -143,7 +149,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
                     className="text-xs font-semibold mt-1"
                     style={{ color: "var(--ink2)" }}
                   >
-                    {result.genre}　·　{PRICE_LABEL[result.price_level]}
+                    {getGenreLabel(result.genre)}{"\u3000\u00B7\u3000"}{PRICE_LABEL[result.price_level]}
                   </span>
                   {result.access && (
                     <div className="flex items-center gap-1 text-[11px] mt-[2px]" style={{ color: "var(--ink3)" }}>
@@ -168,7 +174,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
                         fontFamily: "var(--font-body)",
                       }}
                     >
-                      口コミを見る
+                      {tCard("googleReview")}
                     </a>
                     <a
                       href={dirUrl}
@@ -186,7 +192,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
                         fontFamily: "var(--font-body)",
                       }}
                     >
-                      <Navigation size={13} color="#fff" /> ルート案内
+                      <Navigation size={13} color="#fff" /> {tCard("route")}
                     </a>
                   </div>
                 </div>
@@ -210,7 +216,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
             boxShadow: spinning ? "none" : "0 4px 16px var(--accent-glow)",
           }}
         >
-          {spinning ? "えらんでるよ..." : result ? "もう一回まわす" : "スタート"}
+          {spinning ? t("spinning") : result ? t("restart") : t("start")}
         </button>
       </div>
     </div>

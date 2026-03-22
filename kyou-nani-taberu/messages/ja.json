@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "今日何食べる？",
+    "subtitle": "What do you want to eat today",
+    "description": "現在地から近くのお店をサクッと探して、\n迷ったらルーレットでおまかせ。"
+  },
+  "login": {
+    "google": "Googleで続ける",
+    "apple": "Appleで続ける",
+    "line": "LINEで続ける",
+    "x": "Xで続ける",
+    "guest": "ゲストで始める",
+    "or": "or",
+    "terms": "続行することで<terms>利用規約</terms>と<privacy>プライバシーポリシー</privacy>に同意します",
+    "termsLink": "利用規約",
+    "privacyLink": "プライバシーポリシー"
+  },
+  "location": {
+    "getLocation": "現在地でお店をさがす",
+    "locating": "取得中...",
+    "demo": "横浜駅周辺（デモ）",
+    "retry": "やり直す",
+    "error": "位置情報を取得できませんでした"
+  },
+  "transport": {
+    "label": "移動手段",
+    "walk": "徒歩",
+    "bike": "自転車",
+    "car": "クルマ"
+  },
+  "time": {
+    "label": "何分以内？"
+  },
+  "nowOpen": {
+    "title": "今あいてるお店だけ",
+    "sub": "現在 {time}・{count}件が営業中"
+  },
+  "genre": {
+    "label": "ジャンル",
+    "reset": "リセット",
+    "japanese": "和食",
+    "izakaya": "居酒屋",
+    "ramen": "ラーメン",
+    "cafe": "カフェ",
+    "italian": "イタリアン",
+    "yakiniku": "焼肉",
+    "chinese": "中華",
+    "bar": "バー",
+    "sushi": "寿司",
+    "curry": "カレー",
+    "western": "洋食",
+    "korean": "韓国料理",
+    "french": "フレンチ",
+    "thai": "タイ料理",
+    "mexican": "メキシカン",
+    "okonomiyaki": "お好み焼き",
+    "creative": "創作料理",
+    "restaurant": "レストラン"
+  },
+  "results": {
+    "count": "{count} 件",
+    "countOpen": "{count} 件 (営業中)",
+    "sortRating": "評価順",
+    "sortDistance": "近い順",
+    "empty": "条件に合うお店がみつかりません",
+    "emptyHint": "時間やジャンルを変えてみてね",
+    "emptyHintOpen": "「今あいてるお店だけ」をOFFにするか、時間を増やしてみてね"
+  },
+  "card": {
+    "minutes": "{min}分",
+    "open": "営業中",
+    "closed": "定休日",
+    "outside": "時間外",
+    "unknown": "不明",
+    "closedDay": "定休日 : {day}",
+    "reviews": "{count}件",
+    "googleReview": "口コミ・詳細",
+    "route": "ルート案内",
+    "noRating": "評価なし"
+  },
+  "roulette": {
+    "title": "今日はこれ食べよ！",
+    "idle": "タップしてスタート",
+    "spinning": "えらんでるよ…",
+    "restart": "もう一回まわす",
+    "start": "スタート",
+    "fab": "迷ったらコレ"
+  },
+  "credit": {
+    "text": "店舗情報は Google Maps Platform、地図は Apple MapKit を利用しています"
+  },
+  "meta": {
+    "title": "今日何食べる？ - 現在地から近くのレストランを探そう",
+    "description": "現在地から近くのお店をサクッと探して、迷ったらルーレットでおまかせ。"
+  }
+}

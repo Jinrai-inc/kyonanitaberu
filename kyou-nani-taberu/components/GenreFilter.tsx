@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { GenreIcon } from "./icons/GenreIcons";
+import type { GenreKey } from "@/lib/genreMap";
 
 interface GenreFilterProps {
   allGenres: string[];
@@ -10,6 +12,8 @@ interface GenreFilterProps {
 }
 
 export default function GenreFilter({ allGenres, selected, onChange }: GenreFilterProps) {
+  const t = useTranslations("genre");
+
   const toggle = (genre: string) => {
     if (selected.includes(genre)) {
       onChange(selected.filter((g) => g !== genre));
@@ -25,7 +29,7 @@ export default function GenreFilter({ allGenres, selected, onChange }: GenreFilt
           className="text-[10.5px] font-extrabold uppercase"
           style={{ color: "var(--ink4)", letterSpacing: "1.6px" }}
         >
-          ジャンル
+          {t("label")}
         </span>
         {selected.length > 0 && (
           <button
@@ -41,29 +45,29 @@ export default function GenreFilter({ allGenres, selected, onChange }: GenreFilt
               fontFamily: "var(--font-body)",
             }}
           >
-            リセット
+            {t("reset")}
           </button>
         )}
       </div>
       <div className="flex flex-wrap gap-[7px]">
-        {allGenres.map((genre) => (
+        {allGenres.map((genreKey) => (
           <button
-            key={genre}
-            onClick={() => toggle(genre)}
+            key={genreKey}
+            onClick={() => toggle(genreKey)}
             className="flex items-center gap-[5px] cursor-pointer transition-all duration-200"
             style={{
               padding: "6px 12px",
               borderRadius: 22,
-              border: `1.5px solid ${selected.includes(genre) ? "var(--accent)" : "var(--border)"}`,
-              background: selected.includes(genre) ? "var(--accent-light)" : "var(--card-solid)",
-              color: selected.includes(genre) ? "var(--accent)" : "var(--ink3)",
+              border: `1.5px solid ${selected.includes(genreKey) ? "var(--accent)" : "var(--border)"}`,
+              background: selected.includes(genreKey) ? "var(--accent-light)" : "var(--card-solid)",
+              color: selected.includes(genreKey) ? "var(--accent)" : "var(--ink3)",
               fontSize: 12,
               fontWeight: 700,
               fontFamily: "var(--font-body)",
             }}
           >
-            <GenreIcon genre={genre} size={15} />
-            {genre}
+            <GenreIcon genre={genreKey} size={15} />
+            {t(genreKey as GenreKey)}
           </button>
         ))}
       </div>

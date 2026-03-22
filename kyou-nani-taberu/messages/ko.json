@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "오늘 뭐 먹지?",
+    "subtitle": "일본에서 주변 맛집 찾기",
+    "description": "주변 맛집을 빠르게 검색하고,\n고민되면 룰렛에 맡기세요."
+  },
+  "login": {
+    "google": "Google로 계속하기",
+    "apple": "Apple로 계속하기",
+    "line": "LINE으로 계속하기",
+    "x": "X로 계속하기",
+    "guest": "게스트로 시작",
+    "or": "또는",
+    "terms": "계속하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하게 됩니다",
+    "termsLink": "이용약관",
+    "privacyLink": "개인정보 처리방침"
+  },
+  "location": {
+    "getLocation": "주변 맛집 검색",
+    "locating": "위치 확인 중...",
+    "demo": "요코하마역 주변 (데모)",
+    "retry": "다시 시도",
+    "error": "위치 정보를 가져올 수 없습니다"
+  },
+  "transport": {
+    "label": "이동수단",
+    "walk": "도보",
+    "bike": "자전거",
+    "car": "자동차"
+  },
+  "time": {
+    "label": "몇 분 이내?"
+  },
+  "nowOpen": {
+    "title": "영업 중인 곳만",
+    "sub": "현재 {time} · {count}곳 영업 중"
+  },
+  "genre": {
+    "label": "장르",
+    "reset": "초기화",
+    "japanese": "일식",
+    "izakaya": "이자카야",
+    "ramen": "라멘",
+    "cafe": "카페",
+    "italian": "이탈리안",
+    "yakiniku": "야키니쿠",
+    "chinese": "중식",
+    "bar": "바",
+    "sushi": "스시",
+    "curry": "카레",
+    "western": "양식",
+    "korean": "한식",
+    "french": "프렌치",
+    "thai": "태국 요리",
+    "mexican": "멕시칸",
+    "okonomiyaki": "오코노미야키",
+    "creative": "창작 요리",
+    "restaurant": "레스토랑"
+  },
+  "results": {
+    "count": "{count}곳",
+    "countOpen": "{count}곳 (영업 중)",
+    "sortRating": "평점순",
+    "sortDistance": "가까운순",
+    "empty": "조건에 맞는 맛집이 없습니다",
+    "emptyHint": "시간이나 장르를 바꿔보세요",
+    "emptyHintOpen": "'영업 중인 곳만'을 끄거나 이동시간을 늘려보세요"
+  },
+  "card": {
+    "minutes": "{min}분",
+    "open": "영업 중",
+    "closed": "정기휴일",
+    "outside": "영업 외",
+    "unknown": "영업시간 불명",
+    "closedDay": "정기휴일: {day}",
+    "reviews": "{count}개 리뷰",
+    "googleReview": "리뷰 보기",
+    "route": "길찾기",
+    "noRating": "평점 없음"
+  },
+  "roulette": {
+    "title": "오늘은 이거 먹자!",
+    "idle": "탭하여 시작",
+    "spinning": "고르는 중…",
+    "restart": "다시 돌리기",
+    "start": "시작",
+    "fab": "못 고르겠어?"
+  },
+  "credit": {
+    "text": "매장 정보: Google Maps Platform, 지도: Apple MapKit"
+  },
+  "meta": {
+    "title": "오늘 뭐 먹지? - 일본에서 주변 맛집 찾기",
+    "description": "주변 맛집을 빠르게 검색하고, 고민되면 룰렛에 맡기세요."
+  }
+}

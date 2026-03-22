@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "今天吃什么？",
+    "subtitle": "在日本寻找附近餐厅",
+    "description": "快速搜索附近餐厅，\n犹豫不决？让转盘帮你选！"
+  },
+  "login": {
+    "google": "使用Google继续",
+    "apple": "使用Apple继续",
+    "line": "使用LINE继续",
+    "x": "使用X继续",
+    "guest": "游客模式",
+    "or": "或",
+    "terms": "继续即表示您同意<terms>使用条款</terms>和<privacy>隐私政策</privacy>",
+    "termsLink": "使用条款",
+    "privacyLink": "隐私政策"
+  },
+  "location": {
+    "getLocation": "搜索附近餐厅",
+    "locating": "定位中...",
+    "demo": "横滨站附近（演示）",
+    "retry": "重试",
+    "error": "无法获取位置信息"
+  },
+  "transport": {
+    "label": "出行方式",
+    "walk": "步行",
+    "bike": "骑行",
+    "car": "驾车"
+  },
+  "time": {
+    "label": "几分钟以内？"
+  },
+  "nowOpen": {
+    "title": "仅显示营业中",
+    "sub": "现在 {time}・{count}家营业中"
+  },
+  "genre": {
+    "label": "菜系",
+    "reset": "重置",
+    "japanese": "日料",
+    "izakaya": "居酒屋",
+    "ramen": "拉面",
+    "cafe": "咖啡厅",
+    "italian": "意大利菜",
+    "yakiniku": "烤肉",
+    "chinese": "中餐",
+    "bar": "酒吧",
+    "sushi": "寿司",
+    "curry": "咖喱",
+    "western": "西餐",
+    "korean": "韩餐",
+    "french": "法餐",
+    "thai": "泰餐",
+    "mexican": "墨西哥菜",
+    "okonomiyaki": "大阪烧",
+    "creative": "创意料理",
+    "restaurant": "餐厅"
+  },
+  "results": {
+    "count": "{count} 家",
+    "countOpen": "{count} 家（营业中）",
+    "sortRating": "评分排序",
+    "sortDistance": "距离排序",
+    "empty": "没有符合条件的餐厅",
+    "emptyHint": "试试调整时间或菜系筛选",
+    "emptyHintOpen": "关闭「仅显示营业中」或增加出行时间试试"
+  },
+  "card": {
+    "minutes": "{min}分钟",
+    "open": "营业中",
+    "closed": "休息日",
+    "outside": "未营业",
+    "unknown": "营业时间不明",
+    "closedDay": "定休日：{day}",
+    "reviews": "{count}条评价",
+    "googleReview": "查看评价",
+    "route": "导航前往",
+    "noRating": "暂无评分"
+  },
+  "roulette": {
+    "title": "今天就吃这个！",
+    "idle": "点击开始",
+    "spinning": "选择中…",
+    "restart": "再转一次",
+    "start": "开始",
+    "fab": "选不了？"
+  },
+  "credit": {
+    "text": "餐厅信息由 Google Maps Platform 提供，地图由 Apple MapKit 提供"
+  },
+  "meta": {
+    "title": "今天吃什么？ - 在日本附近找餐厅",
+    "description": "快速搜索附近餐厅，犹豫不决？让转盘帮你选！"
+  }
+}

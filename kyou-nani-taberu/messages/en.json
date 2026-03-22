@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "What to Eat Today?",
+    "subtitle": "Find restaurants near you",
+    "description": "Find nearby restaurants in seconds.\nCan't decide? Let the roulette choose for you."
+  },
+  "login": {
+    "google": "Continue with Google",
+    "apple": "Continue with Apple",
+    "line": "Continue with LINE",
+    "x": "Continue with X",
+    "guest": "Continue as Guest",
+    "or": "or",
+    "terms": "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>",
+    "termsLink": "Terms of Service",
+    "privacyLink": "Privacy Policy"
+  },
+  "location": {
+    "getLocation": "Find restaurants near me",
+    "locating": "Locating...",
+    "demo": "Near Yokohama Station (Demo)",
+    "retry": "Retry",
+    "error": "Could not get your location"
+  },
+  "transport": {
+    "label": "How are you getting there?",
+    "walk": "Walk",
+    "bike": "Bike",
+    "car": "Drive"
+  },
+  "time": {
+    "label": "Within how many minutes?"
+  },
+  "nowOpen": {
+    "title": "Open now only",
+    "sub": "Now {time} · {count} open"
+  },
+  "genre": {
+    "label": "Cuisine",
+    "reset": "Reset",
+    "japanese": "Japanese",
+    "izakaya": "Izakaya",
+    "ramen": "Ramen",
+    "cafe": "Café",
+    "italian": "Italian",
+    "yakiniku": "Yakiniku",
+    "chinese": "Chinese",
+    "bar": "Bar",
+    "sushi": "Sushi",
+    "curry": "Curry",
+    "western": "Western",
+    "korean": "Korean",
+    "french": "French",
+    "thai": "Thai",
+    "mexican": "Mexican",
+    "okonomiyaki": "Okonomiyaki",
+    "creative": "Creative",
+    "restaurant": "Restaurant"
+  },
+  "results": {
+    "count": "{count} results",
+    "countOpen": "{count} results (open now)",
+    "sortRating": "Top rated",
+    "sortDistance": "Nearest",
+    "empty": "No restaurants match your criteria",
+    "emptyHint": "Try adjusting time or cuisine filters",
+    "emptyHintOpen": "Turn off 'Open now' or increase travel time"
+  },
+  "card": {
+    "minutes": "{min} min",
+    "open": "Open",
+    "closed": "Closed today",
+    "outside": "Closed",
+    "unknown": "Hours unknown",
+    "closedDay": "Regular holiday: {day}",
+    "reviews": "{count} reviews",
+    "googleReview": "Reviews & Details",
+    "route": "Get Directions",
+    "noRating": "No rating"
+  },
+  "roulette": {
+    "title": "Let's eat this!",
+    "idle": "Tap to start",
+    "spinning": "Choosing...",
+    "restart": "Spin again",
+    "start": "Start",
+    "fab": "Can't decide?"
+  },
+  "credit": {
+    "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit."
+  },
+  "meta": {
+    "title": "What to Eat Today? - Find restaurants near you in Japan",
+    "description": "Find nearby restaurants in seconds. Can't decide? Let the roulette choose for you."
+  }
+}

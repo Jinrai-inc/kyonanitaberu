@@ -1,31 +1,37 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { Place, TransportMode } from "@/types/place";
 import { MapPin, Clock, Calendar, Navigation, Phone } from "./icons/UiIcons";
 import { GoogleIcon } from "./icons/AuthIcons";
 import { GenreIcon } from "./icons/GenreIcons";
 import Stars from "./Stars";
 import { PRICE_LABEL } from "@/lib/genreMap";
-import { isOpenNow, isClosedToday } from "@/lib/timeUtils";
+import { isOpenNow, isClosedToday, getCloseDayDisplay } from "@/lib/timeUtils";
 import { getTimeKey } from "@/lib/radiusCalc";
 
 interface ShopCardProps {
   shop: Place;
   mode: TransportMode;
   delay: number;
+  locale: string;
 }
 
-export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
+export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations("card");
+  const tGenre = useTranslations("genre");
   const tk = getTimeKey(mode);
   const minutes = shop[tk] ?? 0;
 
-  const nowOpen = !isClosedToday(shop.close_day) && isOpenNow(shop.opening_hours_text);
-  const closed = isClosedToday(shop.close_day);
+  const nowOpen = !isClosedToday(shop.close_day, locale) && isOpenNow(shop.opening_hours_text);
+  const closed = isClosedToday(shop.close_day, locale);
 
   const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + shop.address)}`;
   const dirUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(shop.name + " " + shop.address)}`;
+
+  const genreLabel = tGenre.has(shop.genre) ? tGenre(shop.genre) : shop.genre;
 
   return (
     <div
@@ -74,7 +80,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
                 borderRadius: 16,
               }}
             >
-              {minutes}分
+              {t("minutes", { min: minutes })}
             </span>
           </div>
 
@@ -94,7 +100,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
                 borderRadius: 5,
               }}
             >
-              {shop.genre}
+              {genreLabel}
             </span>
             <span className="text-[10.5px] font-semibold" style={{ color: "var(--ink3)" }}>
               {PRICE_LABEL[shop.price_level]}
@@ -109,7 +115,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
                   borderRadius: 10,
                 }}
               >
-                定休日
+                {t("closed")}
               </span>
             ) : nowOpen ? (
               <span
@@ -131,7 +137,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
                     display: "inline-block",
                   }}
                 />
-                営業中
+                {t("open")}
               </span>
             ) : (
               <span
@@ -143,7 +149,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
                   borderRadius: 10,
                 }}
               >
-                時間外
+                {t("outside")}
               </span>
             )}
           </div>
@@ -167,7 +173,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
             </div>
             <div className="flex items-center gap-2 text-xs" style={{ color: "var(--ink2)" }}>
               <Calendar size={14} color="var(--ink3)" />
-              <span>定休日 : {shop.close_day}</span>
+              <span>{t("closedDay", { day: getCloseDayDisplay(shop.close_day, locale) })}</span>
             </div>
             {shop.access && (
               <div className="flex items-center gap-2 text-xs" style={{ color: "var(--ink2)" }}>
@@ -201,7 +207,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
                 fontFamily: "var(--font-body)",
               }}
             >
-              <GoogleIcon size={14} /> 口コミ・詳細
+              <GoogleIcon size={14} /> {t("googleReview")}
             </a>
             <a
               href={dirUrl}
@@ -220,7 +226,7 @@ export default function ShopCard({ shop, mode, delay }: ShopCardProps) {
                 fontFamily: "var(--font-body)",
               }}
             >
-              <Navigation size={13} color="#fff" /> ルート案内
+              <Navigation size={13} color="#fff" /> {t("route")}
             </a>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { MapPin, Refresh } from "./icons/UiIcons";
 
 interface LocationBarProps {
@@ -11,6 +12,7 @@ interface LocationBarProps {
 
 export default function LocationBar({ located, onLocate, onReset }: LocationBarProps) {
   const [loading, setLoading] = useState(false);
+  const t = useTranslations("location");
 
   const handleLocate = () => {
     setLoading(true);
@@ -32,7 +34,7 @@ export default function LocationBar({ located, onLocate, onReset }: LocationBarP
       >
         <MapPin size={15} color="var(--green)" />
         <span className="text-xs font-bold" style={{ color: "var(--green)" }}>
-          横浜駅周辺（デモ）
+          {t("demo")}
         </span>
         <button
           onClick={onReset}
@@ -59,7 +61,7 @@ export default function LocationBar({ located, onLocate, onReset }: LocationBarP
       }}
     >
       <MapPin size={18} color={loading ? "var(--ink4)" : "var(--accent)"} />
-      {loading ? "取得中..." : "現在地でお店をさがす"}
+      {loading ? t("locating") : t("getLocation")}
     </button>
   );
 }

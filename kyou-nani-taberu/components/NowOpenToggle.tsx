@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { Zap } from "./icons/UiIcons";
 
 interface NowOpenToggleProps {
@@ -11,6 +12,8 @@ interface NowOpenToggleProps {
 }
 
 export default function NowOpenToggle({ onlyOpen, onChange, time, openCount }: NowOpenToggleProps) {
+  const t = useTranslations("nowOpen");
+
   return (
     <section className="mb-5 animate-fadeUp" style={{ animationDelay: "130ms" }}>
       <button
@@ -32,13 +35,13 @@ export default function NowOpenToggle({ onlyOpen, onChange, time, openCount }: N
               className="block text-[13px] font-extrabold"
               style={{ color: onlyOpen ? "#fff" : "var(--ink)" }}
             >
-              今あいてるお店だけ
+              {t("title")}
             </span>
             <span
               className="block text-[10.5px] mt-[1px]"
               style={{ color: onlyOpen ? "rgba(255,255,255,0.7)" : "var(--ink3)" }}
             >
-              現在 {time}・{openCount}件が営業中
+              {t("sub", { time, count: openCount })}
             </span>
           </div>
         </div>
