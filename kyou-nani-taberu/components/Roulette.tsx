@@ -1,0 +1,218 @@
+"use client";
+
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import type { Place } from "@/types/place";
+import { XIcon, MapPin, Navigation } from "./icons/UiIcons";
+import { GenreIcon } from "./icons/GenreIcons";
+import { PRICE_LABEL } from "@/lib/genreMap";
+import Stars from "./Stars";
+
+interface RouletteProps {
+  items: Place[];
+  onClose: () => void;
+}
+
+export default function Roulette({ items, onClose }: RouletteProps) {
+  const [spinning, setSpinning] = useState(false);
+  const [result, setResult] = useState<Place | null>(null);
+  const [idx, setIdx] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const spin = useCallback(() => {
+    if (spinning || !items.length) return;
+    setSpinning(true);
+    setResult(null);
+
+    let speed = 45;
+    let count = 0;
+    const total = 28 + Math.floor(Math.random() * 18);
+
+    const tick = () => {
+      count++;
+      setIdx((p) => (p + 1) % items.length);
+
+      if (count >= total) {
+        if (timerRef.current) clearInterval(timerRef.current);
+        setResult(items[Math.floor(Math.random() * items.length)]);
+        setSpinning(false);
+        return;
+      }
+
+      if (count > total * 0.65) speed = 130;
+      if (count > total * 0.82) speed = 240;
+
+      if (timerRef.current) clearInterval(timerRef.current);
+      timerRef.current = setInterval(tick, speed);
+    };
+
+    timerRef.current = setInterval(tick, speed);
+  }, [spinning, items]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  const current = items[idx % items.length];
+  const display = result || current;
+
+  const gUrl = result
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(result.name + " " + result.address)}`
+    : "";
+  const dirUrl = result
+    ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(result.name + " " + result.address)}`
+    : "";
+
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center z-[1000] animate-fadeIn"
+      style={{
+        background: "rgba(42, 38, 34, 0.45)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+      }}
+      onClick={onClose}
+    >
+      <div
+        className="relative w-[90%] max-w-[370px] text-center animate-scaleIn"
+        style={{
+          background: "var(--card-solid)",
+          borderRadius: 24,
+          padding: "32px 24px 24px",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-[14px] right-[16px] bg-transparent border-none cursor-pointer flex p-1"
+        >
+          <XIcon size={18} color="var(--ink4)" />
+        </button>
+
+        <h2
+          className="text-xl font-semibold"
+          style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+        >
+          今日はこれ食べよ！
+        </h2>
+
+        {/* Display area */}
+        <div
+          className={`flex items-center justify-center my-5 ${spinning ? "animate-wobble" : ""}`}
+          style={{
+            background: result ? "var(--green-light)" : spinning ? "#FFF8F0" : "var(--bg)",
+            borderRadius: "var(--radius)",
+            padding: "28px 16px",
+            minHeight: 120,
+            transition: "background 0.4s",
+          }}
+        >
+          {!result && !spinning && (
+            <span className="text-[13px]" style={{ color: "var(--ink4)" }}>
+              タップしてスタート
+            </span>
+          )}
+
+          {(spinning || result) && display && (
+            <div className="flex flex-col items-center">
+              <div
+                className="flex items-center justify-center mb-2"
+                style={{
+                  width: 56,
+                  height: 56,
+                  background: "var(--card-solid)",
+                  borderRadius: 16,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                }}
+              >
+                <GenreIcon genre={display.genre} size={40} />
+              </div>
+              <span
+                className="text-lg font-semibold"
+                style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+              >
+                {display.name}
+              </span>
+
+              {result && (
+                <div className="animate-fadeIn mt-2 flex flex-col items-center gap-[3px]">
+                  <Stars rating={result.rating} count={result.user_ratings_total} />
+                  <span
+                    className="text-xs font-semibold mt-1"
+                    style={{ color: "var(--ink2)" }}
+                  >
+                    {result.genre}　·　{PRICE_LABEL[result.price_level]}
+                  </span>
+                  {result.access && (
+                    <div className="flex items-center gap-1 text-[11px] mt-[2px]" style={{ color: "var(--ink3)" }}>
+                      <MapPin size={12} color="var(--ink3)" />
+                      <span>{result.access}</span>
+                    </div>
+                  )}
+                  <div className="flex gap-2 mt-3 w-full">
+                    <a
+                      href={gUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 flex items-center justify-center gap-[5px] no-underline transition-transform duration-200 hover:scale-[1.02]"
+                      style={{
+                        padding: "9px 0",
+                        borderRadius: "var(--radius-sm)",
+                        border: "1.5px solid var(--accent)",
+                        color: "var(--accent)",
+                        background: "var(--accent-light)",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        fontFamily: "var(--font-body)",
+                      }}
+                    >
+                      口コミを見る
+                    </a>
+                    <a
+                      href={dirUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 flex items-center justify-center gap-[5px] no-underline transition-transform duration-200 hover:scale-[1.02]"
+                      style={{
+                        padding: "9px 0",
+                        borderRadius: "var(--radius-sm)",
+                        border: "none",
+                        background: "var(--accent)",
+                        color: "#fff",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        fontFamily: "var(--font-body)",
+                      }}
+                    >
+                      <Navigation size={13} color="#fff" /> ルート案内
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <button
+          onClick={spin}
+          disabled={spinning || !items.length}
+          className="w-full border-none cursor-pointer transition-all duration-300 hover:scale-[1.02]"
+          style={{
+            padding: 14,
+            borderRadius: 50,
+            background: spinning ? "var(--ink4)" : "var(--accent)",
+            color: "#fff",
+            fontSize: 15,
+            fontWeight: 800,
+            fontFamily: "var(--font-body)",
+            boxShadow: spinning ? "none" : "0 4px 16px var(--accent-glow)",
+          }}
+        >
+          {spinning ? "えらんでるよ..." : result ? "もう一回まわす" : "スタート"}
+        </button>
+      </div>
+    </div>
+  );
+}
