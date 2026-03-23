@@ -60,6 +60,9 @@
     "mexican": "メキシカン",
     "okonomiyaki": "お好み焼き",
     "creative": "創作料理",
+    "bakery": "パン・ベーカリー",
+    "fastfood": "ファストフード",
+    "pizza": "ピザ",
     "restaurant": "レストラン"
   },
   "results": {

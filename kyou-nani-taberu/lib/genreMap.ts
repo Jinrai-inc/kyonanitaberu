@@ -17,6 +17,12 @@ export const TYPE_TO_GENRE: Record<string, string> = {
   "bar": "bar",
   "izakaya": "izakaya",
   "restaurant": "restaurant",
+  // Additional types
+  "bakery": "bakery",
+  "fast_food_restaurant": "fastfood",
+  "pizza_restaurant": "pizza",
+  "steak_house": "western",
+  "noodle_restaurant": "ramen",
 };
 
 // Genre keys used for filtering (translation key based)
@@ -24,7 +30,7 @@ export const ALL_GENRE_KEYS = [
   "japanese", "izakaya", "ramen", "cafe", "italian",
   "yakiniku", "chinese", "bar", "sushi", "curry",
   "western", "korean", "french", "thai", "mexican",
-  "okonomiyaki", "creative",
+  "okonomiyaki", "creative", "bakery", "fastfood", "pizza",
 ] as const;
 
 export type GenreKey = (typeof ALL_GENRE_KEYS)[number] | "restaurant";
@@ -49,6 +55,11 @@ const GENRE_NAMES: Record<string, Record<string, string>> = {
   "bar": { ja: "バー", en: "Bar", "zh-CN": "酒吧", "zh-TW": "酒吧", ko: "바" },
   "izakaya": { ja: "居酒屋", en: "Izakaya", "zh-CN": "居酒屋", "zh-TW": "居酒屋", ko: "이자카야" },
   "restaurant": { ja: "レストラン", en: "Restaurant", "zh-CN": "餐厅", "zh-TW": "餐廳", ko: "레스토랑" },
+  "bakery": { ja: "パン・ベーカリー", en: "Bakery", "zh-CN": "面包店", "zh-TW": "麵包店", ko: "베이커리" },
+  "fast_food_restaurant": { ja: "ファストフード", en: "Fast Food", "zh-CN": "快餐", "zh-TW": "速食", ko: "패스트푸드" },
+  "pizza_restaurant": { ja: "ピザ", en: "Pizza", "zh-CN": "披萨", "zh-TW": "披薩", ko: "피자" },
+  "steak_house": { ja: "洋食", en: "Western", "zh-CN": "西餐", "zh-TW": "西餐", ko: "양식" },
+  "noodle_restaurant": { ja: "ラーメン", en: "Ramen", "zh-CN": "拉面", "zh-TW": "拉麵", ko: "라멘" },
 };
 
 export function getGenreName(primaryType: string, locale: string): string {

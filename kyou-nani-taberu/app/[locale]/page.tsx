@@ -102,10 +102,12 @@ export default function Home() {
     return () => clearInterval(iv);
   }, []);
 
-  const fetchPlaces = useCallback(async (lat: number, lng: number, transportMode: TransportMode, minutes: number) => {
+  const fetchPlaces = useCallback(async (lat: number, lng: number, _transportMode: TransportMode, minutes: number) => {
     setLoading(true);
     try {
-      const radius = calcRadius(transportMode, minutes);
+      // Always search with the car radius to ensure nearby places are included
+      // regardless of transport mode. Client-side filtering handles mode-specific time limits.
+      const radius = calcRadius("car", minutes);
       const places = await fetchNearbyPlaces({ lat, lng, radius, locale });
 
       const placesWithTimes = places.map((place) => {

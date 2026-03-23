@@ -60,6 +60,9 @@
     "mexican": "Mexican",
     "okonomiyaki": "Okonomiyaki",
     "creative": "Creative",
+    "bakery": "Bakery",
+    "fastfood": "Fast Food",
+    "pizza": "Pizza",
     "restaurant": "Restaurant"
   },
   "results": {
