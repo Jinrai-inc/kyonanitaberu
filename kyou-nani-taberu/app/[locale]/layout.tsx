@@ -66,6 +66,11 @@ export default async function LocaleLayout({ children, params }: Props) {
           href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap"
           rel="stylesheet"
         />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2054790971615092"
+          crossOrigin="anonymous"
+        />
         {process.env.NEXT_PUBLIC_APPLE_MAPKIT_TOKEN && (
           <script
             src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js"
