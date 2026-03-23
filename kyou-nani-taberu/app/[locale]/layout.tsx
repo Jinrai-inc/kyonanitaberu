@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { locales } from "@/i18n/config";
+import AuthProvider from "@/components/AuthProvider";
 
 type Props = {
   children: React.ReactNode;
@@ -73,9 +74,11 @@ export default async function LocaleLayout({ children, params }: Props) {
         )}
       </head>
       <body style={{ fontFamily: "'M PLUS Rounded 1c', sans-serif" }}>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );

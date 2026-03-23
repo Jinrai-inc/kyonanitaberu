@@ -1,21 +1,29 @@
 "use client";
 
 import React, { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { GoogleIcon, AppleIcon, LINEIcon, XTwitterIcon, GuestIcon } from "./icons/AuthIcons";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 interface LoginScreenProps {
-  onLogin: (method: string) => void;
+  onGuestLogin: () => void;
 }
 
-export default function LoginScreen({ onLogin }: LoginScreenProps) {
+export default function LoginScreen({ onGuestLogin }: LoginScreenProps) {
   const [leaving, setLeaving] = useState(false);
   const t = useTranslations();
 
-  const go = (method: string) => {
+  const handleOAuth = (provider: string) => {
     setLeaving(true);
-    setTimeout(() => onLogin(method), 700);
+    setTimeout(() => {
+      signIn(provider);
+    }, 700);
+  };
+
+  const handleGuest = () => {
+    setLeaving(true);
+    setTimeout(() => onGuestLogin(), 700);
   };
 
   return (
@@ -103,7 +111,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
         {/* Auth buttons */}
         <div className="grid gap-[10px]">
           <button
-            onClick={() => go("google")}
+            onClick={() => handleOAuth("google")}
             className="flex items-center justify-center gap-[10px] w-full py-[13px] px-4 font-bold text-sm cursor-pointer transition-all duration-200 hover:-translate-y-[1px]"
             style={{
               borderRadius: "var(--radius-sm)",
@@ -118,7 +126,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           </button>
 
           <button
-            onClick={() => go("apple")}
+            onClick={() => handleOAuth("apple")}
             className="flex items-center justify-center gap-[10px] w-full py-[13px] px-4 font-bold text-sm cursor-pointer transition-all duration-200 hover:-translate-y-[1px]"
             style={{
               borderRadius: "var(--radius-sm)",
@@ -133,7 +141,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           </button>
 
           <button
-            onClick={() => go("line")}
+            onClick={() => handleOAuth("line")}
             className="flex items-center justify-center gap-[10px] w-full py-[13px] px-4 font-bold text-sm cursor-pointer transition-all duration-200 hover:-translate-y-[1px]"
             style={{
               borderRadius: "var(--radius-sm)",
@@ -146,21 +154,6 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             <LINEIcon size={20} />
             <span>{t("login.line")}</span>
           </button>
-
-          <button
-            onClick={() => go("x")}
-            className="flex items-center justify-center gap-[10px] w-full py-[13px] px-4 font-bold text-sm cursor-pointer transition-all duration-200 hover:-translate-y-[1px]"
-            style={{
-              borderRadius: "var(--radius-sm)",
-              border: "1.5px solid #000",
-              background: "#000",
-              fontFamily: "var(--font-body)",
-              color: "#fff",
-            }}
-          >
-            <XTwitterIcon size={18} />
-            <span>{t("login.x")}</span>
-          </button>
         </div>
 
         {/* Divider */}
@@ -172,7 +165,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
 
         {/* Guest */}
         <button
-          onClick={() => go("guest")}
+          onClick={handleGuest}
           className="flex items-center justify-center gap-[10px] w-full py-[13px] px-4 font-bold text-sm cursor-pointer transition-all duration-200 hover:-translate-y-[1px]"
           style={{
             borderRadius: "var(--radius-sm)",

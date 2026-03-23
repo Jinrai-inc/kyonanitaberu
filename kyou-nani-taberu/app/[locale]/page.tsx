@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import type { Place, TransportMode, SortBy } from "@/types/place";
 import { ALL_GENRE_KEYS } from "@/lib/genreMap";
@@ -27,10 +28,11 @@ interface UserLocation {
 }
 
 export default function Home() {
+  const { data: session, status } = useSession();
   const locale = useLocale();
   const t = useTranslations("credit");
   const tLoc = useTranslations("location");
-  const [auth, setAuth] = useState<string | null>(null);
+  const [guestMode, setGuestMode] = useState(false);
   const [mode, setMode] = useState<TransportMode>("walk");
   const [maxTime, setMaxTime] = useState(10);
   const [genres, setGenres] = useState<string[]>([]);
@@ -123,8 +125,24 @@ export default function Home() {
     return ALL_GENRE_KEYS.filter((g) => genresInRange.has(g));
   }, [shops, maxTime, tk]);
 
-  if (!auth) {
-    return <LoginScreen onLogin={setAuth} />;
+  const isAuthenticated = status === "authenticated" || guestMode;
+
+  if (status === "loading") {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: "var(--bg)" }}
+      >
+        <div
+          className="w-8 h-8 border-2 rounded-full animate-spin"
+          style={{ borderColor: "var(--border)", borderTopColor: "var(--accent)" }}
+        />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginScreen onGuestLogin={() => setGuestMode(true)} />;
   }
 
   return (
@@ -139,7 +157,13 @@ export default function Home() {
             "radial-gradient(ellipse at 15% 0%, rgba(201,85,62,0.04) 0%, transparent 55%), radial-gradient(ellipse at 85% 100%, rgba(90,158,111,0.04) 0%, transparent 50%)",
         }}
       >
-        <AppHeader onLogout={() => setAuth(null)} />
+        <AppHeader onLogout={() => {
+          if (guestMode) {
+            setGuestMode(false);
+          } else {
+            signOut();
+          }
+        }} />
 
         <div className="max-w-[460px] mx-auto px-4 pb-[110px]">
           <LocationBar
