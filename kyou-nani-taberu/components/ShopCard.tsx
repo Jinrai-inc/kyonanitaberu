@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Place, TransportMode } from "@/types/place";
 import { MapPin, Clock, Calendar, Navigation, Phone } from "./icons/UiIcons";
@@ -18,35 +18,45 @@ interface ShopCardProps {
   locale: string;
 }
 
-function useHotpepperUrl(shop: Place, enabled: boolean) {
-  const [url, setUrl] = useState<string | null>(shop.hotpepper_url ?? null);
-  const [loaded, setLoaded] = useState(!!shop.hotpepper_url);
+// Extract area name from Japanese address for search queries
+// e.g. "東京都渋谷区道玄坂1-2-3" → "渋谷"
+//      "神奈川県横浜市西区..." → "横浜"
+//      "大阪府大阪市北区..." → "大阪 北区"
+function extractArea(address: string): string {
+  // Remove prefecture
+  const noPref = address.replace(/^.+?[都道府県]/, "");
 
-  useEffect(() => {
-    if (!enabled || loaded) return;
-    setLoaded(true);
-    fetch(
-      `/api/places/hotpepper?name=${encodeURIComponent(shop.name)}&lat=${shop.lat}&lng=${shop.lng}`
-    )
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.url) setUrl(d.url);
-      })
-      .catch(() => {});
-  }, [enabled, loaded, shop.name, shop.lat, shop.lng]);
+  // Match city/ward/town
+  const cityMatch = noPref.match(/^(.+?[市郡])/);
+  const wardMatch = noPref.match(/(.+?区)/);
 
-  return url;
+  if (cityMatch && wardMatch) {
+    // "横浜市西区" → "横浜 西区"
+    const city = cityMatch[1].replace(/市$/, "");
+    const ward = wardMatch[1].match(/([^市]+区)/)?.[1] || "";
+    return `${city} ${ward}`.trim();
+  }
+  if (wardMatch) {
+    // "渋谷区" → "渋谷"
+    return wardMatch[1].replace(/区$/, "");
+  }
+  if (cityMatch) {
+    return cityMatch[1].replace(/[市郡]$/, "");
+  }
+
+  // Fallback: first 4 chars after prefecture
+  return noPref.slice(0, 4);
 }
 
-function buildReservationLinks(shop: Place, hotpepperUrl: string | null) {
-  const q = encodeURIComponent(shop.name + " " + shop.address.split(/[都道府県]/)[1]?.split(/[市区町村郡]/)[0] || "");
+function buildReservationLinks(shop: Place) {
+  const area = extractArea(shop.address);
+  const nameAndArea = `${shop.name} ${area}`;
+  const q = encodeURIComponent(nameAndArea);
   return [
-    hotpepperUrl
-      ? { label: "ホットペッパー", href: hotpepperUrl }
-      : { label: "ホットペッパーで検索", href: `https://www.hotpepper.jp/SA11/?keyword=${encodeURIComponent(shop.name)}` },
-    { label: "食べログで検索", href: `https://tabelog.com/rstLst/?vs=1&sk=${q}` },
-    { label: "一休で検索", href: `https://restaurant.ikyu.com/search/?keyword=${q}` },
-    { label: "OZmallで検索", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${q}` },
+    { label: "ホットペッパー", href: `https://www.hotpepper.jp/SA11/?keyword=${q}` },
+    { label: "食べログ", href: `https://tabelog.com/rstLst/?vs=1&sk=${q}` },
+    { label: "一休", href: `https://restaurant.ikyu.com/search/?keyword=${q}` },
+    { label: "OZmall", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${q}` },
   ];
 }
 
@@ -63,8 +73,7 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
   const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + shop.address)}`;
   const dirUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(shop.name + " " + shop.address)}`;
 
-  const hotpepperUrl = useHotpepperUrl(shop, open);
-  const reservationLinks = buildReservationLinks(shop, hotpepperUrl);
+  const reservationLinks = buildReservationLinks(shop);
 
   const genreLabel = tGenre.has(shop.genre) ? tGenre(shop.genre) : shop.genre;
 
