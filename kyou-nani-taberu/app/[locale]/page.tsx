@@ -142,7 +142,15 @@ export default function Home() {
   }
 
   if (!isAuthenticated) {
-    return <LoginScreen onGuestLogin={() => setGuestMode(true)} />;
+    return <LoginScreen onGuestLogin={() => {
+      setGuestMode(true);
+      // Record guest login
+      fetch("/api/analytics/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider: "guest", isGuest: true, locale }),
+      }).catch(() => {});
+    }} />;
   }
 
   return (
