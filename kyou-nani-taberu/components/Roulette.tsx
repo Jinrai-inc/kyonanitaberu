@@ -13,31 +13,6 @@ interface RouletteProps {
   onClose: () => void;
 }
 
-function extractArea(address: string): string {
-  const noPref = address.replace(/^.+?[都道府県]/, "");
-  const cityMatch = noPref.match(/^(.+?[市郡])/);
-  const wardMatch = noPref.match(/(.+?区)/);
-  if (cityMatch && wardMatch) {
-    const city = cityMatch[1].replace(/市$/, "");
-    const ward = wardMatch[1].match(/([^市]+区)/)?.[1] || "";
-    return `${city} ${ward}`.trim();
-  }
-  if (wardMatch) return wardMatch[1].replace(/区$/, "");
-  if (cityMatch) return cityMatch[1].replace(/[市郡]$/, "");
-  return noPref.slice(0, 4);
-}
-
-function buildReservationLinks(shop: Place) {
-  const area = extractArea(shop.address);
-  const nameAndArea = `${shop.name} ${area}`;
-  return [
-    { label: "ホットペッパー", href: `https://www.google.com/search?q=${encodeURIComponent(`site:hotpepper.jp ${nameAndArea}`)}` },
-    { label: "食べログ", href: `https://www.google.com/search?q=${encodeURIComponent(`site:tabelog.com ${nameAndArea}`)}` },
-    { label: "一休", href: `https://www.google.com/search?q=${encodeURIComponent(`site:ikyu.com ${nameAndArea}`)}` },
-    { label: "OZmall", href: `https://www.google.com/search?q=${encodeURIComponent(`site:ozmall.co.jp ${nameAndArea}`)}` },
-  ];
-}
-
 export default function Roulette({ items, onClose }: RouletteProps) {
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState<Place | null>(null);
@@ -107,8 +82,6 @@ export default function Roulette({ items, onClose }: RouletteProps) {
     : "";
 
   const getGenreLabel = (genre: string) => tGenre.has(genre) ? tGenre(genre) : genre;
-
-  const reservationLinks = result ? buildReservationLinks(result) : [];
 
   return (
     <div
@@ -277,29 +250,6 @@ export default function Roulette({ items, onClose }: RouletteProps) {
                     >
                       <Navigation size={13} color="#fff" /> {tCard("route")}
                     </a>
-                  </div>
-                  <div className="flex gap-[5px] mt-[6px] flex-wrap justify-center">
-                    {reservationLinks.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center justify-center no-underline transition-transform duration-200 hover:scale-[1.02]"
-                        style={{
-                          padding: "5px 8px",
-                          borderRadius: "var(--radius-sm)",
-                          border: "1px solid var(--border)",
-                          color: "var(--ink2)",
-                          background: "var(--bg)",
-                          fontSize: 10,
-                          fontWeight: 600,
-                          fontFamily: "var(--font-body)",
-                        }}
-                      >
-                        {link.label}
-                      </a>
-                    ))}
                   </div>
                 </div>
               )}

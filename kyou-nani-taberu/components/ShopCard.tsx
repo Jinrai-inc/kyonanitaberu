@@ -18,47 +18,6 @@ interface ShopCardProps {
   locale: string;
 }
 
-// Extract area name from Japanese address for search queries
-// e.g. "東京都渋谷区道玄坂1-2-3" → "渋谷"
-//      "神奈川県横浜市西区..." → "横浜"
-//      "大阪府大阪市北区..." → "大阪 北区"
-function extractArea(address: string): string {
-  // Remove prefecture
-  const noPref = address.replace(/^.+?[都道府県]/, "");
-
-  // Match city/ward/town
-  const cityMatch = noPref.match(/^(.+?[市郡])/);
-  const wardMatch = noPref.match(/(.+?区)/);
-
-  if (cityMatch && wardMatch) {
-    // "横浜市西区" → "横浜 西区"
-    const city = cityMatch[1].replace(/市$/, "");
-    const ward = wardMatch[1].match(/([^市]+区)/)?.[1] || "";
-    return `${city} ${ward}`.trim();
-  }
-  if (wardMatch) {
-    // "渋谷区" → "渋谷"
-    return wardMatch[1].replace(/区$/, "");
-  }
-  if (cityMatch) {
-    return cityMatch[1].replace(/[市郡]$/, "");
-  }
-
-  // Fallback: first 4 chars after prefecture
-  return noPref.slice(0, 4);
-}
-
-function buildReservationLinks(shop: Place) {
-  const area = extractArea(shop.address);
-  const nameAndArea = `${shop.name} ${area}`;
-  return [
-    { label: "ホットペッパー", href: `https://www.google.com/search?q=${encodeURIComponent(`site:hotpepper.jp ${nameAndArea}`)}` },
-    { label: "食べログ", href: `https://www.google.com/search?q=${encodeURIComponent(`site:tabelog.com ${nameAndArea}`)}` },
-    { label: "一休", href: `https://www.google.com/search?q=${encodeURIComponent(`site:ikyu.com ${nameAndArea}`)}` },
-    { label: "OZmall", href: `https://www.google.com/search?q=${encodeURIComponent(`site:ozmall.co.jp ${nameAndArea}`)}` },
-  ];
-}
-
 export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
   const [open, setOpen] = useState(false);
   const t = useTranslations("card");
@@ -71,8 +30,6 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
 
   const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + shop.address)}`;
   const dirUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(shop.name + " " + shop.address)}`;
-
-  const reservationLinks = buildReservationLinks(shop);
 
   const genreLabel = tGenre.has(shop.genre) ? tGenre(shop.genre) : shop.genre;
 
@@ -273,30 +230,6 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
             </a>
           </div>
 
-          <div className="flex gap-[6px] mt-[8px] flex-wrap">
-            {reservationLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="flex items-center justify-center no-underline transition-transform duration-200 hover:scale-[1.02]"
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--border)",
-                  color: "var(--ink2)",
-                  background: "var(--bg)",
-                  fontSize: 10.5,
-                  fontWeight: 600,
-                  fontFamily: "var(--font-body)",
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
         </div>
       )}
     </div>
