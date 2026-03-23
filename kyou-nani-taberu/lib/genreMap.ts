@@ -35,6 +35,11 @@ export const ALL_GENRE_KEYS = [
 
 export type GenreKey = (typeof ALL_GENRE_KEYS)[number] | "restaurant";
 
+// Genres included in izakaya (drinking) mode
+export const IZAKAYA_GENRES: string[] = [
+  "izakaya", "yakiniku", "bar", "japanese", "korean",
+];
+
 // Multi-language genre name resolution
 const GENRE_NAMES: Record<string, Record<string, string>> = {
   "ramen_restaurant": { ja: "ラーメン", en: "Ramen", "zh-CN": "拉面", "zh-TW": "拉麵", ko: "라멘" },

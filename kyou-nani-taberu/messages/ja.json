@@ -100,6 +100,10 @@
     "show": "地図を表示",
     "hide": "地図を隠す"
   },
+  "scene": {
+    "all": "ごはん",
+    "izakaya": "飲み会"
+  },
   "credit": {
     "text": "店舗情報は Google Maps Platform、地図は Apple MapKit を利用しています",
     "hotpepper": "Powered by ホットペッパーグルメ Webサービス",

@@ -100,6 +100,10 @@
     "show": "顯示地圖",
     "hide": "隱藏地圖"
   },
+  "scene": {
+    "all": "餐廳",
+    "izakaya": "聚飲"
+  },
   "credit": {
     "text": "餐廳資訊由 Google Maps Platform 提供，地圖由 Apple MapKit 提供",
     "hotpepper": "Powered by Hot Pepper Gourmet Web Service",

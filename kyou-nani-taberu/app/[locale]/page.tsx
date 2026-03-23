@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import type { Place, TransportMode, SortBy } from "@/types/place";
-import { ALL_GENRE_KEYS } from "@/lib/genreMap";
+import { ALL_GENRE_KEYS, IZAKAYA_GENRES } from "@/lib/genreMap";
 import { getTimeKey, calcRadius, estimateTravelMin } from "@/lib/radiusCalc";
 import { isClosedToday, getTime } from "@/lib/timeUtils";
 import { fetchNearbyPlaces } from "@/lib/places";
@@ -21,6 +21,8 @@ import ShopList from "@/components/ShopList";
 import AppFooter from "@/components/AppFooter";
 import Roulette from "@/components/Roulette";
 import Fab from "@/components/Fab";
+import SceneSelector from "@/components/SceneSelector";
+import type { SceneMode } from "@/components/SceneSelector";
 import MapSection from "@/components/map/MapSection";
 
 interface UserLocation {
@@ -48,6 +50,7 @@ export default function Home() {
   const [nickname, setNickname] = useState<string | null>(null);
   const [profileChecked, setProfileChecked] = useState(false);
   const [profileCompleted, setProfileCompleted] = useState(false);
+  const [scene, setScene] = useState<SceneMode>("all");
   const [mode, setMode] = useState<TransportMode>("walk");
   const [maxTime, setMaxTime] = useState(10);
   const [genres, setGenres] = useState<string[]>([]);
@@ -189,6 +192,10 @@ export default function Home() {
 
   const filteredShops = useMemo(() => {
     let list = shops.filter((s) => (s[tk] ?? 0) <= maxTime);
+    // Apply scene filter (izakaya mode restricts to drinking-related genres)
+    if (scene === "izakaya") {
+      list = list.filter((s) => IZAKAYA_GENRES.includes(s.genre));
+    }
     if (genres.length) list = list.filter((s) => genres.includes(s.genre));
     if (onlyOpen) list = list.filter((s) => !isClosedToday(s.close_day, locale) && s.is_open_now === true);
 
@@ -196,7 +203,7 @@ export default function Home() {
       if (sortBy === "rating") return (b.rating ?? 0) - (a.rating ?? 0);
       return (a[tk] ?? 0) - (b[tk] ?? 0);
     });
-  }, [shops, maxTime, genres, onlyOpen, sortBy, tk, locale]);
+  }, [shops, maxTime, genres, onlyOpen, sortBy, tk, locale, scene]);
 
   const openCount = useMemo(() => {
     return shops.filter(
@@ -208,8 +215,11 @@ export default function Home() {
     const genresInRange = new Set(
       shops.filter((s) => (s[tk] ?? 0) <= maxTime).map((s) => s.genre)
     );
-    return ALL_GENRE_KEYS.filter((g) => genresInRange.has(g));
-  }, [shops, maxTime, tk]);
+    const keys = scene === "izakaya"
+      ? ALL_GENRE_KEYS.filter((g) => IZAKAYA_GENRES.includes(g))
+      : ALL_GENRE_KEYS;
+    return keys.filter((g) => genresInRange.has(g));
+  }, [shops, maxTime, tk, scene]);
 
   // Loading auth state
   if (status === "loading") {
@@ -307,6 +317,7 @@ export default function Home() {
                 places={filteredShops}
                 radius={calcRadius(mode, maxTime)}
               />
+              <SceneSelector scene={scene} onChange={(s) => { setScene(s); setGenres([]); }} />
               <TransportSelector mode={mode} onChange={setMode} />
               <TimeSelector maxTime={maxTime} onChange={setMaxTime} />
               <NowOpenToggle

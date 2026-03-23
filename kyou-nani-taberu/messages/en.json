@@ -100,6 +100,10 @@
     "show": "Show map",
     "hide": "Hide map"
   },
+  "scene": {
+    "all": "Restaurants",
+    "izakaya": "Drinks"
+  },
   "credit": {
     "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit.",
     "hotpepper": "Powered by Hot Pepper Gourmet Web Service",
