@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import type { Place, TransportMode, SortBy } from "@/types/place";
 import { ALL_GENRE_KEYS } from "@/lib/genreMap";
 import { getTimeKey, calcRadius, estimateTravelMin } from "@/lib/radiusCalc";
-import { isOpenNow, isClosedToday, getTime } from "@/lib/timeUtils";
+import { isClosedToday, getTime } from "@/lib/timeUtils";
 import { fetchNearbyPlaces } from "@/lib/places";
 
 import LoginScreen from "@/components/LoginScreen";
@@ -187,7 +187,7 @@ export default function Home() {
   const filteredShops = useMemo(() => {
     let list = shops.filter((s) => (s[tk] ?? 0) <= maxTime);
     if (genres.length) list = list.filter((s) => genres.includes(s.genre));
-    if (onlyOpen) list = list.filter((s) => !isClosedToday(s.close_day, locale) && isOpenNow(s.opening_hours_text));
+    if (onlyOpen) list = list.filter((s) => !isClosedToday(s.close_day, locale) && s.is_open_now === true);
 
     return [...list].sort((a, b) => {
       if (sortBy === "rating") return (b.rating ?? 0) - (a.rating ?? 0);
@@ -197,7 +197,7 @@ export default function Home() {
 
   const openCount = useMemo(() => {
     return shops.filter(
-      (s) => (s[tk] ?? 0) <= maxTime && !isClosedToday(s.close_day, locale) && isOpenNow(s.opening_hours_text)
+      (s) => (s[tk] ?? 0) <= maxTime && !isClosedToday(s.close_day, locale) && s.is_open_now === true
     ).length;
   }, [shops, maxTime, tk, locale]);
 

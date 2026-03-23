@@ -8,7 +8,7 @@ import { GoogleIcon } from "./icons/AuthIcons";
 import { GenreIcon } from "./icons/GenreIcons";
 import Stars from "./Stars";
 import { PRICE_LABEL } from "@/lib/genreMap";
-import { isOpenNow, isClosedToday, getCloseDayDisplay } from "@/lib/timeUtils";
+import { isClosedToday, getCloseDayDisplay } from "@/lib/timeUtils";
 import { getTimeKey } from "@/lib/radiusCalc";
 
 interface ShopCardProps {
@@ -25,8 +25,8 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
   const tk = getTimeKey(mode);
   const minutes = shop[tk] ?? 0;
 
-  const nowOpen = !isClosedToday(shop.close_day, locale) && isOpenNow(shop.opening_hours_text);
   const closed = isClosedToday(shop.close_day, locale);
+  const nowOpen = !closed && shop.is_open_now === true;
 
   const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + shop.address)}`;
   const dirUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(shop.name + " " + shop.address)}`;
