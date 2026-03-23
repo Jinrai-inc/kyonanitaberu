@@ -18,9 +18,14 @@
   "location": {
     "getLocation": "Find restaurants near me",
     "locating": "Locating...",
-    "demo": "Near Yokohama Station (Demo)",
+    "located": "Location found",
+    "searching": "Searching for restaurants…",
     "retry": "Retry",
-    "error": "Could not get your location"
+    "error": "Could not get your location",
+    "denied": "Location permission is required. Please check your browser settings",
+    "unavailable": "Could not determine your location",
+    "timeout": "Location request timed out",
+    "unsupported": "Your browser does not support geolocation"
   },
   "transport": {
     "label": "How are you getting there?",

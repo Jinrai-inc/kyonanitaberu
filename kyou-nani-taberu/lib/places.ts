@@ -5,6 +5,7 @@ export async function fetchNearbyPlaces(params: {
   lng: number;
   radius: number;
   keyword?: string;
+  locale?: string;
 }): Promise<Place[]> {
   const query = new URLSearchParams({
     lat: String(params.lat),
@@ -13,6 +14,9 @@ export async function fetchNearbyPlaces(params: {
   });
   if (params.keyword) {
     query.set("keyword", params.keyword);
+  }
+  if (params.locale) {
+    query.set("locale", params.locale);
   }
 
   const res = await fetch(`/api/places/nearby?${query.toString()}`);

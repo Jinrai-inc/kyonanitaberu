@@ -18,9 +18,14 @@
   "location": {
     "getLocation": "搜尋附近餐廳",
     "locating": "定位中...",
-    "demo": "橫濱站附近（示範）",
+    "located": "已取得位置",
+    "searching": "正在搜尋餐廳…",
     "retry": "重試",
-    "error": "無法取得位置資訊"
+    "error": "無法取得位置資訊",
+    "denied": "需要位置權限，請檢查瀏覽器設定",
+    "unavailable": "無法確定您的位置",
+    "timeout": "定位請求逾時",
+    "unsupported": "您的瀏覽器不支援定位功能"
   },
   "transport": {
     "label": "交通方式",

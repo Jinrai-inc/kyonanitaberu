@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import type { TransportMode, SortBy } from "@/types/place";
-import { MOCK_SHOPS } from "@/lib/mockData";
+import type { Place, TransportMode, SortBy } from "@/types/place";
 import { ALL_GENRE_KEYS } from "@/lib/genreMap";
-import { getTimeKey } from "@/lib/radiusCalc";
+import { getTimeKey, calcRadius } from "@/lib/radiusCalc";
 import { isOpenNow, isClosedToday, getTime } from "@/lib/timeUtils";
+import { fetchNearbyPlaces } from "@/lib/places";
 
 import LoginScreen from "@/components/LoginScreen";
 import AppHeader from "@/components/AppHeader";
@@ -19,30 +19,88 @@ import ShopList from "@/components/ShopList";
 import Roulette from "@/components/Roulette";
 import Fab from "@/components/Fab";
 import MapSection from "@/components/map/MapSection";
-import { calcRadius } from "@/lib/radiusCalc";
+
+interface UserLocation {
+  lat: number;
+  lng: number;
+  address?: string;
+}
 
 export default function Home() {
   const locale = useLocale();
   const t = useTranslations("credit");
+  const tLoc = useTranslations("location");
   const [auth, setAuth] = useState<string | null>(null);
   const [mode, setMode] = useState<TransportMode>("walk");
   const [maxTime, setMaxTime] = useState(10);
   const [genres, setGenres] = useState<string[]>([]);
   const [showRoulette, setShowRoulette] = useState(false);
-  const [located, setLocated] = useState(false);
+  const [location, setLocation] = useState<UserLocation | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>("rating");
   const [onlyOpen, setOnlyOpen] = useState(false);
   const [time, setTime] = useState(getTime());
+  const [shops, setShops] = useState<Place[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const iv = setInterval(() => setTime(getTime()), 60000);
     return () => clearInterval(iv);
   }, []);
 
+  // Fetch places from Google Places API when location, mode, or maxTime changes
+  const fetchPlaces = useCallback(async (lat: number, lng: number, transportMode: TransportMode, minutes: number) => {
+    setLoading(true);
+    try {
+      const radius = calcRadius(transportMode, minutes);
+      const places = await fetchNearbyPlaces({ lat, lng, radius, locale });
+
+      // Calculate approximate travel times based on distance
+      const placesWithTimes = places.map((place) => {
+        const dist = haversineDistance(lat, lng, place.lat, place.lng);
+        return {
+          ...place,
+          walkMin: Math.round(dist / 67),
+          bikeMin: Math.round(dist / 250),
+          carMin: Math.max(1, Math.round(dist / 500)),
+        };
+      });
+
+      setShops(placesWithTimes);
+    } catch (err) {
+      console.error("Failed to fetch places:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [locale]);
+
+  // Re-fetch when mode or maxTime changes (if location is set)
+  useEffect(() => {
+    if (location) {
+      fetchPlaces(location.lat, location.lng, mode, maxTime);
+    }
+  }, [location, mode, maxTime, fetchPlaces]);
+
+  const handleLocate = useCallback(async (lat: number, lng: number) => {
+    // Reverse geocode to get address
+    let address: string | undefined;
+    try {
+      const res = await fetch(
+        `/api/geocode?lat=${lat}&lng=${lng}&locale=${locale}`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        address = data.address;
+      }
+    } catch {
+      // Address is optional, continue without it
+    }
+    setLocation({ lat, lng, address });
+  }, [locale]);
+
   const tk = getTimeKey(mode);
 
   const filteredShops = useMemo(() => {
-    let list = MOCK_SHOPS.filter((s) => (s[tk] ?? 0) <= maxTime);
+    let list = shops.filter((s) => (s[tk] ?? 0) <= maxTime);
     if (genres.length) list = list.filter((s) => genres.includes(s.genre));
     if (onlyOpen) list = list.filter((s) => !isClosedToday(s.close_day, locale) && isOpenNow(s.opening_hours_text));
 
@@ -50,20 +108,20 @@ export default function Home() {
       if (sortBy === "rating") return (b.rating ?? 0) - (a.rating ?? 0);
       return (a[tk] ?? 0) - (b[tk] ?? 0);
     });
-  }, [mode, maxTime, genres, onlyOpen, sortBy, tk, locale]);
+  }, [shops, maxTime, genres, onlyOpen, sortBy, tk, locale]);
 
   const openCount = useMemo(() => {
-    return MOCK_SHOPS.filter(
+    return shops.filter(
       (s) => (s[tk] ?? 0) <= maxTime && !isClosedToday(s.close_day, locale) && isOpenNow(s.opening_hours_text)
     ).length;
-  }, [maxTime, tk, locale]);
+  }, [shops, maxTime, tk, locale]);
 
   const availableGenres = useMemo(() => {
     const genresInRange = new Set(
-      MOCK_SHOPS.filter((s) => (s[tk] ?? 0) <= maxTime).map((s) => s.genre)
+      shops.filter((s) => (s[tk] ?? 0) <= maxTime).map((s) => s.genre)
     );
     return ALL_GENRE_KEYS.filter((g) => genresInRange.has(g));
-  }, [maxTime, tk]);
+  }, [shops, maxTime, tk]);
 
   if (!auth) {
     return <LoginScreen onLogin={setAuth} />;
@@ -85,18 +143,20 @@ export default function Home() {
 
         <div className="max-w-[460px] mx-auto px-4 pb-[110px]">
           <LocationBar
-            located={located}
-            onLocate={() => setLocated(true)}
+            located={!!location}
+            onLocate={handleLocate}
             onReset={() => {
-              setLocated(false);
+              setLocation(null);
               setGenres([]);
+              setShops([]);
             }}
+            address={location?.address}
           />
 
-          {located && (
+          {location && (
             <>
               <MapSection
-                center={{ lat: 35.4660, lng: 139.6190 }}
+                center={{ lat: location.lat, lng: location.lng }}
                 places={filteredShops}
                 radius={calcRadius(mode, maxTime)}
               />
@@ -113,14 +173,30 @@ export default function Home() {
                 selected={genres}
                 onChange={setGenres}
               />
-              <ShopList
-                shops={filteredShops}
-                mode={mode}
-                sortBy={sortBy}
-                onSortChange={setSortBy}
-                onlyOpen={onlyOpen}
-                locale={locale}
-              />
+
+              {loading ? (
+                <div className="text-center py-8">
+                  <div
+                    className="inline-block w-6 h-6 border-2 rounded-full animate-spin"
+                    style={{
+                      borderColor: "var(--border)",
+                      borderTopColor: "var(--accent)",
+                    }}
+                  />
+                  <p className="text-xs mt-2" style={{ color: "var(--ink4)" }}>
+                    {tLoc("searching")}
+                  </p>
+                </div>
+              ) : (
+                <ShopList
+                  shops={filteredShops}
+                  mode={mode}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                  onlyOpen={onlyOpen}
+                  locale={locale}
+                />
+              )}
 
               <div
                 className="text-center text-[10px] mt-6 pt-3"
@@ -129,7 +205,7 @@ export default function Home() {
                 {t("text")}
               </div>
 
-              {filteredShops.length > 0 && (
+              {filteredShops.length > 0 && !loading && (
                 <Fab onClick={() => setShowRoulette(true)} />
               )}
             </>
@@ -142,4 +218,16 @@ export default function Home() {
       )}
     </>
   );
+}
+
+// Haversine distance in meters
+function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371000;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }

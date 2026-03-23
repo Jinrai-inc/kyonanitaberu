@@ -18,9 +18,14 @@
   "location": {
     "getLocation": "搜索附近餐厅",
     "locating": "定位中...",
-    "demo": "横滨站附近（演示）",
+    "located": "已获取位置",
+    "searching": "正在搜索餐厅…",
     "retry": "重试",
-    "error": "无法获取位置信息"
+    "error": "无法获取位置信息",
+    "denied": "需要位置权限，请检查浏览器设置",
+    "unavailable": "无法确定您的位置",
+    "timeout": "定位请求超时",
+    "unsupported": "您的浏览器不支持定位功能"
   },
   "transport": {
     "label": "出行方式",
