@@ -18,6 +18,7 @@ import TimeSelector from "@/components/TimeSelector";
 import NowOpenToggle from "@/components/NowOpenToggle";
 import GenreFilter from "@/components/GenreFilter";
 import ShopList from "@/components/ShopList";
+import AppFooter from "@/components/AppFooter";
 import Roulette from "@/components/Roulette";
 import Fab from "@/components/Fab";
 import MapSection from "@/components/map/MapSection";
@@ -42,7 +43,6 @@ function getGuestId(): string {
 export default function Home() {
   const { data: session, status } = useSession();
   const locale = useLocale();
-  const t = useTranslations("credit");
   const tLoc = useTranslations("location");
   const [guestMode, setGuestMode] = useState(false);
   const [nickname, setNickname] = useState<string | null>(null);
@@ -295,6 +295,8 @@ export default function Home() {
             address={location?.address}
           />
 
+          {!location && <AppFooter />}
+
           {location && (
             <>
               <MapSection
@@ -340,17 +342,7 @@ export default function Home() {
                 />
               )}
 
-              <div
-                className="text-center text-[10px] mt-6 pt-3"
-                style={{ color: "var(--ink4)", borderTop: "1px solid var(--border)" }}
-              >
-                <p>{t("text")}</p>
-                <div className="flex justify-center gap-4 mt-2">
-                  <a href="/terms" className="underline" style={{ color: "var(--ink4)" }}>利用規約</a>
-                  <a href="https://jinrai.co.jp/privacypolicy/" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "var(--ink4)" }}>プライバシーポリシー</a>
-                  <a href="/company" className="underline" style={{ color: "var(--ink4)" }}>運営会社</a>
-                </div>
-              </div>
+              <AppFooter />
 
               {filteredShops.length > 0 && !loading && (
                 <Fab onClick={() => setShowRoulette(true)} />
