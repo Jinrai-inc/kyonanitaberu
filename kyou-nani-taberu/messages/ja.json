@@ -105,9 +105,7 @@
     "izakaya": "飲み会"
   },
   "credit": {
-    "text": "店舗情報は Google Maps Platform、地図は Apple MapKit を利用しています",
-    "hotpepper": "Powered by ホットペッパーグルメ Webサービス",
-    "affiliate": "一部リンクにはアフィリエイト広告が含まれます"
+    "text": "店舗情報は Google Maps Platform、地図は Apple MapKit を利用しています"
   },
   "meta": {
     "title": "今日何食べる？ - 現在地から近くのレストランを探そう",

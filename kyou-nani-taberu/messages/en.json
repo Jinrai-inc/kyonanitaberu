@@ -105,9 +105,7 @@
     "izakaya": "Drinks"
   },
   "credit": {
-    "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit.",
-    "hotpepper": "Powered by Hot Pepper Gourmet Web Service",
-    "affiliate": "Some links may contain affiliate advertising"
+    "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit."
   },
   "meta": {
     "title": "What to Eat Today? - Find restaurants near you in Japan",
