@@ -19,6 +19,7 @@ import NowOpenToggle from "@/components/NowOpenToggle";
 import GenreFilter from "@/components/GenreFilter";
 import ShopList from "@/components/ShopList";
 import AppFooter from "@/components/AppFooter";
+import AdMax from "@/components/AdMax";
 import Roulette from "@/components/Roulette";
 import Fab from "@/components/Fab";
 import SceneSelector from "@/components/SceneSelector";
@@ -308,7 +309,12 @@ export default function Home() {
             address={location?.address}
           />
 
-          {!location && <AppFooter />}
+          {!location && (
+            <>
+              <AdMax />
+              <AppFooter />
+            </>
+          )}
 
           {location && (
             <>
@@ -356,6 +362,7 @@ export default function Home() {
                 />
               )}
 
+              <AdMax />
               <AppFooter />
 
               {filteredShops.length > 0 && !loading && (
