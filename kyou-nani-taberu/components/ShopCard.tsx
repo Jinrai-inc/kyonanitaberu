@@ -30,6 +30,13 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
 
   const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + shop.address)}`;
   const dirUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(shop.name + " " + shop.address)}`;
+  const nameEncoded = encodeURIComponent(shop.name);
+  const reservationLinks = [
+    { label: "ホットペッパー", href: `https://www.hotpepper.jp/SA11/?vos=nhppalsa000016&keyword=${nameEncoded}` },
+    { label: "食べログ", href: `https://tabelog.com/rstLst/?vs=1&sk=${nameEncoded}` },
+    { label: "一休", href: `https://restaurant.ikyu.com/search/?keyword=${nameEncoded}` },
+    { label: "OZmall", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${nameEncoded}` },
+  ];
 
   const genreLabel = tGenre.has(shop.genre) ? tGenre(shop.genre) : shop.genre;
 
@@ -228,6 +235,31 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
             >
               <Navigation size={13} color="#fff" /> {t("route")}
             </a>
+          </div>
+
+          <div className="flex gap-[6px] mt-[8px] flex-wrap">
+            {reservationLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center justify-center no-underline transition-transform duration-200 hover:scale-[1.02]"
+                style={{
+                  padding: "6px 10px",
+                  borderRadius: "var(--radius-sm)",
+                  border: "1px solid var(--border)",
+                  color: "var(--ink2)",
+                  background: "var(--bg)",
+                  fontSize: 10.5,
+                  fontWeight: 600,
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
       )}

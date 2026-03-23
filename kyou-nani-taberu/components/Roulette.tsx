@@ -70,6 +70,18 @@ export default function Roulette({ items, onClose }: RouletteProps) {
 
   const getGenreLabel = (genre: string) => tGenre.has(genre) ? tGenre(genre) : genre;
 
+  const reservationLinks = result
+    ? (() => {
+        const nameEncoded = encodeURIComponent(result.name);
+        return [
+          { label: "ホットペッパー", href: `https://www.hotpepper.jp/SA11/?vos=nhppalsa000016&keyword=${nameEncoded}` },
+          { label: "食べログ", href: `https://tabelog.com/rstLst/?vs=1&sk=${nameEncoded}` },
+          { label: "一休", href: `https://restaurant.ikyu.com/search/?keyword=${nameEncoded}` },
+          { label: "OZmall", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${nameEncoded}` },
+        ];
+      })()
+    : [];
+
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-[1000] animate-fadeIn"
@@ -194,6 +206,29 @@ export default function Roulette({ items, onClose }: RouletteProps) {
                     >
                       <Navigation size={13} color="#fff" /> {tCard("route")}
                     </a>
+                  </div>
+                  <div className="flex gap-[5px] mt-[6px] flex-wrap justify-center">
+                    {reservationLinks.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-center no-underline transition-transform duration-200 hover:scale-[1.02]"
+                        style={{
+                          padding: "5px 8px",
+                          borderRadius: "var(--radius-sm)",
+                          border: "1px solid var(--border)",
+                          color: "var(--ink2)",
+                          background: "var(--bg)",
+                          fontSize: 10,
+                          fontWeight: 600,
+                          fontFamily: "var(--font-body)",
+                        }}
+                      >
+                        {link.label}
+                      </a>
+                    ))}
                   </div>
                 </div>
               )}
