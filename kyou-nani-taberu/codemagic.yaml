@@ -1,0 +1,33 @@
+workflows:
+  ios-app:
+    name: iOS App Build
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      node: 20
+      xcode: latest
+      groups:
+        - ios_credentials # Codemagicで環境変数グループを設定してください
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Capacitor sync
+        script: |
+          mkdir -p out
+          npx cap sync ios
+      - name: Set up code signing
+        script: |
+          xcode-project use-profiles
+      - name: Build iOS app
+        script: |
+          cd ios/App
+          xcode-project build-ipa \
+            --project "App.xcodeproj" \
+            --scheme "App"
+    artifacts:
+      - ios/App/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
