@@ -5,7 +5,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import type { Place, TransportMode, SortBy } from "@/types/place";
 import { ALL_GENRE_KEYS } from "@/lib/genreMap";
-import { getTimeKey, calcRadius } from "@/lib/radiusCalc";
+import { getTimeKey, calcRadius, estimateTravelMin } from "@/lib/radiusCalc";
 import { isOpenNow, isClosedToday, getTime } from "@/lib/timeUtils";
 import { fetchNearbyPlaces } from "@/lib/places";
 
@@ -56,14 +56,14 @@ export default function Home() {
       const radius = calcRadius(transportMode, minutes);
       const places = await fetchNearbyPlaces({ lat, lng, radius, locale });
 
-      // Calculate approximate travel times based on distance
+      // Calculate approximate travel times based on straight-line distance + detour factor
       const placesWithTimes = places.map((place) => {
         const dist = haversineDistance(lat, lng, place.lat, place.lng);
         return {
           ...place,
-          walkMin: Math.round(dist / 67),
-          bikeMin: Math.round(dist / 250),
-          carMin: Math.max(1, Math.round(dist / 500)),
+          walkMin: estimateTravelMin("walk", dist),
+          bikeMin: estimateTravelMin("bike", dist),
+          carMin: estimateTravelMin("car", dist),
         };
       });
 
