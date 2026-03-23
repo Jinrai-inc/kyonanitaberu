@@ -184,10 +184,10 @@ export default function LoginScreen({ onGuestLogin }: LoginScreenProps) {
         <p className="text-[10px] mt-[18px] leading-[1.6]" style={{ color: "var(--ink4)" }}>
           {t.rich("login.terms", {
             terms: (chunks) => (
-              <a href="#" className="underline" style={{ color: "var(--ink3)" }}>{chunks}</a>
+              <a href="/terms" className="underline" style={{ color: "var(--ink3)" }}>{chunks}</a>
             ),
             privacy: (chunks) => (
-              <a href="#" className="underline" style={{ color: "var(--ink3)" }}>{chunks}</a>
+              <a href="https://jinrai.co.jp/privacypolicy/" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "var(--ink3)" }}>{chunks}</a>
             ),
           })}
         </p>
