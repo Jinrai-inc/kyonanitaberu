@@ -81,12 +81,14 @@ export default function LoginScreen({ onGuestLogin }: LoginScreenProps) {
         </div>
 
         {/* Brand */}
-        <div className="mb-4">
-          <svg width="52" height="52" viewBox="0 0 56 56" fill="none">
-            <rect width="56" height="56" rx="16" fill="var(--accent)" />
-            <path d="M18 38V22a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a6 6 0 0 1-6 6h-4l-4 8z" fill="#fff" opacity="0.9" />
-            <circle cx="34" cy="18" r="4" fill="#fff" opacity="0.6" />
-          </svg>
+        <div className="mb-2">
+          <img
+            src="/icon-192.png"
+            alt="今日何食べる？"
+            width={80}
+            height={80}
+            style={{ margin: "0 auto" }}
+          />
         </div>
 
         <h1
