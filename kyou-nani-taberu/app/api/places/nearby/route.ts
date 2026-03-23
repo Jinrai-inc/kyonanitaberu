@@ -17,11 +17,13 @@ const FIELD_MASK = [
 ].join(",");
 
 // Search in batches of types to get more results beyond the 20-per-request limit
-// 3 groups = ~$0.096 per search (vs $0.032 for single request)
+// 5 groups = ~$0.160 per search
 const TYPE_GROUPS = [
-  ["restaurant"],
-  ["ramen_restaurant", "sushi_restaurant", "cafe", "izakaya", "bakery"],
-  ["italian_restaurant", "chinese_restaurant", "korean_restaurant", "indian_restaurant", "fast_food_restaurant"],
+  ["restaurant", "japanese_restaurant"],
+  ["ramen_restaurant", "sushi_restaurant", "noodle_restaurant", "seafood_restaurant"],
+  ["cafe", "coffee_shop", "izakaya", "bar", "bakery"],
+  ["italian_restaurant", "chinese_restaurant", "korean_restaurant", "indian_restaurant", "french_restaurant"],
+  ["fast_food_restaurant", "pizza_restaurant", "hamburger_restaurant", "barbecue_restaurant", "thai_restaurant", "mexican_restaurant", "steak_house"],
 ];
 
 function mapPriceLevel(level: string | undefined): number {

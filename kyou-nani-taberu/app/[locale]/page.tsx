@@ -102,12 +102,13 @@ export default function Home() {
     return () => clearInterval(iv);
   }, []);
 
-  const fetchPlaces = useCallback(async (lat: number, lng: number, _transportMode: TransportMode, minutes: number) => {
+  const fetchPlaces = useCallback(async (lat: number, lng: number, transportMode: TransportMode, minutes: number) => {
     setLoading(true);
     try {
-      // Always search with the car radius to ensure nearby places are included
-      // regardless of transport mode. Client-side filtering handles mode-specific time limits.
-      const radius = calcRadius("car", minutes);
+      // Use the selected transport mode's radius (with detour buffer) so Google
+      // returns places that are actually reachable within the time limit.
+      // Multiply by 1.3 to compensate for the detour factor applied in estimateTravelMin.
+      const radius = Math.round(calcRadius(transportMode, minutes) * 1.3);
       const places = await fetchNearbyPlaces({ lat, lng, radius, locale });
 
       const placesWithTimes = places.map((place) => {
