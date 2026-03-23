@@ -10,6 +10,7 @@ import { isOpenNow, isClosedToday, getTime } from "@/lib/timeUtils";
 import { fetchNearbyPlaces } from "@/lib/places";
 
 import LoginScreen from "@/components/LoginScreen";
+import ProfileSetup from "@/components/ProfileSetup";
 import AppHeader from "@/components/AppHeader";
 import LocationBar from "@/components/LocationBar";
 import TransportSelector from "@/components/TransportSelector";
@@ -27,12 +28,26 @@ interface UserLocation {
   address?: string;
 }
 
+// Generate a persistent guest ID
+function getGuestId(): string {
+  if (typeof window === "undefined") return "";
+  let id = localStorage.getItem("guest_id");
+  if (!id) {
+    id = "guest_" + crypto.randomUUID();
+    localStorage.setItem("guest_id", id);
+  }
+  return id;
+}
+
 export default function Home() {
   const { data: session, status } = useSession();
   const locale = useLocale();
   const t = useTranslations("credit");
   const tLoc = useTranslations("location");
   const [guestMode, setGuestMode] = useState(false);
+  const [nickname, setNickname] = useState<string | null>(null);
+  const [profileChecked, setProfileChecked] = useState(false);
+  const [profileCompleted, setProfileCompleted] = useState(false);
   const [mode, setMode] = useState<TransportMode>("walk");
   const [maxTime, setMaxTime] = useState(10);
   const [genres, setGenres] = useState<string[]>([]);
@@ -44,19 +59,55 @@ export default function Home() {
   const [shops, setShops] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const isAuthenticated = status === "authenticated" || guestMode;
+
+  // Check profile completion on auth change
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setProfileChecked(false);
+      setProfileCompleted(false);
+      setNickname(null);
+      return;
+    }
+
+    const checkProfile = async () => {
+      try {
+        const params = new URLSearchParams();
+        if (guestMode) {
+          params.set("guestId", getGuestId());
+        } else if (session?.user) {
+          const user = session.user as unknown as Record<string, unknown>;
+          params.set("provider", (user.provider as string) || "");
+          // Use email as fallback identifier
+          params.set("providerAccountId", (session.user.email as string) || "");
+        }
+
+        const res = await fetch(`/api/profile?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          setProfileCompleted(data.profileCompleted);
+          if (data.nickname) setNickname(data.nickname);
+        }
+      } catch {
+        // If check fails, show profile setup
+      }
+      setProfileChecked(true);
+    };
+
+    checkProfile();
+  }, [isAuthenticated, guestMode, session]);
+
   useEffect(() => {
     const iv = setInterval(() => setTime(getTime()), 60000);
     return () => clearInterval(iv);
   }, []);
 
-  // Fetch places from Google Places API when location, mode, or maxTime changes
   const fetchPlaces = useCallback(async (lat: number, lng: number, transportMode: TransportMode, minutes: number) => {
     setLoading(true);
     try {
       const radius = calcRadius(transportMode, minutes);
       const places = await fetchNearbyPlaces({ lat, lng, radius, locale });
 
-      // Calculate approximate travel times based on straight-line distance + detour factor
       const placesWithTimes = places.map((place) => {
         const dist = haversineDistance(lat, lng, place.lat, place.lng);
         return {
@@ -75,7 +126,6 @@ export default function Home() {
     }
   }, [locale]);
 
-  // Re-fetch when mode or maxTime changes (if location is set)
   useEffect(() => {
     if (location) {
       fetchPlaces(location.lat, location.lng, mode, maxTime);
@@ -83,21 +133,54 @@ export default function Home() {
   }, [location, mode, maxTime, fetchPlaces]);
 
   const handleLocate = useCallback(async (lat: number, lng: number) => {
-    // Reverse geocode to get address
     let address: string | undefined;
     try {
-      const res = await fetch(
-        `/api/geocode?lat=${lat}&lng=${lng}&locale=${locale}`
-      );
+      const res = await fetch(`/api/geocode?lat=${lat}&lng=${lng}&locale=${locale}`);
       if (res.ok) {
         const data = await res.json();
         address = data.address;
       }
     } catch {
-      // Address is optional, continue without it
+      // Address is optional
     }
     setLocation({ lat, lng, address });
   }, [locale]);
+
+  const handleProfileComplete = useCallback(async (profile: { nickname: string; gender: string; ageGroup: string }) => {
+    try {
+      const body: Record<string, unknown> = {
+        nickname: profile.nickname,
+        gender: profile.gender,
+        ageGroup: profile.ageGroup,
+      };
+
+      if (guestMode) {
+        body.isGuest = true;
+        body.guestId = getGuestId();
+        body.provider = "guest";
+      } else if (session?.user) {
+        const user = session.user as unknown as Record<string, unknown>;
+        body.provider = user.provider;
+        body.providerAccountId = session.user.email;
+        body.email = session.user.email;
+      }
+
+      const res = await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setNickname(data.nickname || profile.nickname);
+      }
+    } catch {
+      // Save failed, but let user continue
+    }
+    setProfileCompleted(true);
+    setNickname(profile.nickname);
+  }, [guestMode, session]);
 
   const tk = getTimeKey(mode);
 
@@ -125,8 +208,7 @@ export default function Home() {
     return ALL_GENRE_KEYS.filter((g) => genresInRange.has(g));
   }, [shops, maxTime, tk]);
 
-  const isAuthenticated = status === "authenticated" || guestMode;
-
+  // Loading auth state
   if (status === "loading") {
     return (
       <div
@@ -141,16 +223,41 @@ export default function Home() {
     );
   }
 
+  // Not logged in
   if (!isAuthenticated) {
     return <LoginScreen onGuestLogin={() => {
       setGuestMode(true);
-      // Record guest login
       fetch("/api/analytics/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider: "guest", isGuest: true, locale }),
       }).catch(() => {});
     }} />;
+  }
+
+  // Profile check loading
+  if (!profileChecked) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: "var(--bg)" }}
+      >
+        <div
+          className="w-8 h-8 border-2 rounded-full animate-spin"
+          style={{ borderColor: "var(--border)", borderTopColor: "var(--accent)" }}
+        />
+      </div>
+    );
+  }
+
+  // Profile not completed - show setup
+  if (!profileCompleted) {
+    return (
+      <ProfileSetup
+        defaultName={session?.user?.name || ""}
+        onComplete={handleProfileComplete}
+      />
+    );
   }
 
   return (
@@ -165,13 +272,16 @@ export default function Home() {
             "radial-gradient(ellipse at 15% 0%, rgba(201,85,62,0.04) 0%, transparent 55%), radial-gradient(ellipse at 85% 100%, rgba(90,158,111,0.04) 0%, transparent 50%)",
         }}
       >
-        <AppHeader onLogout={() => {
-          if (guestMode) {
-            setGuestMode(false);
-          } else {
-            signOut();
-          }
-        }} />
+        <AppHeader
+          nickname={nickname}
+          onLogout={() => {
+            if (guestMode) {
+              setGuestMode(false);
+            } else {
+              signOut();
+            }
+          }}
+        />
 
         <div className="max-w-[460px] mx-auto px-4 pb-[110px]">
           <LocationBar

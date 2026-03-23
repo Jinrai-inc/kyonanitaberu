@@ -5,10 +5,11 @@ import { LogOut } from "./icons/UiIcons";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 interface AppHeaderProps {
+  nickname?: string | null;
   onLogout: () => void;
 }
 
-export default function AppHeader({ onLogout }: AppHeaderProps) {
+export default function AppHeader({ nickname, onLogout }: AppHeaderProps) {
   return (
     <header
       className="sticky top-0 z-50"
@@ -23,9 +24,17 @@ export default function AppHeader({ onLogout }: AppHeaderProps) {
         <img
           src="/logo-optimized.webp"
           alt="今日何食べる？"
-          style={{ height: 40 }}
+          style={{ height: 56 }}
         />
         <div className="flex items-center gap-2">
+          {nickname && (
+            <span
+              className="text-xs font-bold truncate max-w-[80px]"
+              style={{ color: "var(--ink2)" }}
+            >
+              {nickname}さん
+            </span>
+          )}
           <LanguageSwitcher />
           <button
             onClick={onLogout}
