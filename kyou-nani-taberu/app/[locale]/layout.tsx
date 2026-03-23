@@ -71,6 +71,12 @@ export default async function LocaleLayout({ children, params }: Props) {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2054790971615092"
           crossOrigin="anonymous"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: 'var vc_pid = "892570587";',
+          }}
+        />
+        <script async src="//aml.valuecommerce.com/vcdal.js" />
         {process.env.NEXT_PUBLIC_APPLE_MAPKIT_TOKEN && (
           <script
             src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js"
