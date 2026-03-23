@@ -19,6 +19,8 @@ export interface Place {
   walkMin?: number;
   bikeMin?: number;
   carMin?: number;
+  // Affiliate
+  hotpepper_url?: string | null;
   // Phase 1.5
   rating_loaded?: boolean;
   // Phase 2

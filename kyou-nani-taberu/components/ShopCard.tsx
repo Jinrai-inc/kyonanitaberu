@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import type { Place, TransportMode } from "@/types/place";
 import { MapPin, Clock, Calendar, Navigation, Phone } from "./icons/UiIcons";
@@ -18,6 +18,38 @@ interface ShopCardProps {
   locale: string;
 }
 
+function useHotpepperUrl(shop: Place, enabled: boolean) {
+  const [url, setUrl] = useState<string | null>(shop.hotpepper_url ?? null);
+  const [loaded, setLoaded] = useState(!!shop.hotpepper_url);
+
+  useEffect(() => {
+    if (!enabled || loaded) return;
+    setLoaded(true);
+    fetch(
+      `/api/places/hotpepper?name=${encodeURIComponent(shop.name)}&lat=${shop.lat}&lng=${shop.lng}`
+    )
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.url) setUrl(d.url);
+      })
+      .catch(() => {});
+  }, [enabled, loaded, shop.name, shop.lat, shop.lng]);
+
+  return url;
+}
+
+function buildReservationLinks(shop: Place, hotpepperUrl: string | null) {
+  const q = encodeURIComponent(shop.name + " " + shop.address.split(/[都道府県]/)[1]?.split(/[市区町村郡]/)[0] || "");
+  return [
+    hotpepperUrl
+      ? { label: "ホットペッパー", href: hotpepperUrl }
+      : { label: "ホットペッパーで検索", href: `https://www.hotpepper.jp/SA11/?keyword=${encodeURIComponent(shop.name)}` },
+    { label: "食べログで検索", href: `https://tabelog.com/rstLst/?vs=1&sk=${q}` },
+    { label: "一休で検索", href: `https://restaurant.ikyu.com/search/?keyword=${q}` },
+    { label: "OZmallで検索", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${q}` },
+  ];
+}
+
 export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
   const [open, setOpen] = useState(false);
   const t = useTranslations("card");
@@ -30,13 +62,9 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
 
   const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + shop.address)}`;
   const dirUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(shop.name + " " + shop.address)}`;
-  const nameEncoded = encodeURIComponent(shop.name);
-  const reservationLinks = [
-    { label: "ホットペッパー", href: `https://www.hotpepper.jp/SA11/?vos=nhppalsa000016&keyword=${nameEncoded}` },
-    { label: "食べログ", href: `https://tabelog.com/rstLst/?vs=1&sk=${nameEncoded}` },
-    { label: "一休", href: `https://restaurant.ikyu.com/search/?keyword=${nameEncoded}` },
-    { label: "OZmall", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${nameEncoded}` },
-  ];
+
+  const hotpepperUrl = useHotpepperUrl(shop, open);
+  const reservationLinks = buildReservationLinks(shop, hotpepperUrl);
 
   const genreLabel = tGenre.has(shop.genre) ? tGenre(shop.genre) : shop.genre;
 

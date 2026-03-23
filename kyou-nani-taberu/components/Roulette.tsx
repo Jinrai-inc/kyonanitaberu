@@ -13,10 +13,23 @@ interface RouletteProps {
   onClose: () => void;
 }
 
+function buildReservationLinks(shop: Place, hotpepperUrl: string | null) {
+  const q = encodeURIComponent(shop.name + " " + shop.address.split(/[都道府県]/)[1]?.split(/[市区町村郡]/)[0] || "");
+  return [
+    hotpepperUrl
+      ? { label: "ホットペッパー", href: hotpepperUrl }
+      : { label: "ホットペッパーで検索", href: `https://www.hotpepper.jp/SA11/?keyword=${encodeURIComponent(shop.name)}` },
+    { label: "食べログで検索", href: `https://tabelog.com/rstLst/?vs=1&sk=${q}` },
+    { label: "一休で検索", href: `https://restaurant.ikyu.com/search/?keyword=${q}` },
+    { label: "OZmallで検索", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${q}` },
+  ];
+}
+
 export default function Roulette({ items, onClose }: RouletteProps) {
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState<Place | null>(null);
   const [idx, setIdx] = useState(0);
+  const [hotpepperUrl, setHotpepperUrl] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const t = useTranslations("roulette");
   const tCard = useTranslations("card");
@@ -26,6 +39,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
     if (spinning || !items.length) return;
     setSpinning(true);
     setResult(null);
+    setHotpepperUrl(null);
 
     let speed = 45;
     let count = 0;
@@ -58,6 +72,19 @@ export default function Roulette({ items, onClose }: RouletteProps) {
     };
   }, []);
 
+  // Fetch HotPepper URL when result is set
+  useEffect(() => {
+    if (!result) return;
+    fetch(
+      `/api/places/hotpepper?name=${encodeURIComponent(result.name)}&lat=${result.lat}&lng=${result.lng}`
+    )
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.url) setHotpepperUrl(d.url);
+      })
+      .catch(() => {});
+  }, [result]);
+
   const current = items[idx % items.length];
   const display = result || current;
 
@@ -70,17 +97,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
 
   const getGenreLabel = (genre: string) => tGenre.has(genre) ? tGenre(genre) : genre;
 
-  const reservationLinks = result
-    ? (() => {
-        const nameEncoded = encodeURIComponent(result.name);
-        return [
-          { label: "ホットペッパー", href: `https://www.hotpepper.jp/SA11/?vos=nhppalsa000016&keyword=${nameEncoded}` },
-          { label: "食べログ", href: `https://tabelog.com/rstLst/?vs=1&sk=${nameEncoded}` },
-          { label: "一休", href: `https://restaurant.ikyu.com/search/?keyword=${nameEncoded}` },
-          { label: "OZmall", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${nameEncoded}` },
-        ];
-      })()
-    : [];
+  const reservationLinks = result ? buildReservationLinks(result, hotpepperUrl) : [];
 
   return (
     <div
