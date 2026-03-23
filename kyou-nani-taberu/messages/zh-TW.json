@@ -102,7 +102,8 @@
   },
   "credit": {
     "text": "餐廳資訊由 Google Maps Platform 提供，地圖由 Apple MapKit 提供",
-    "hotpepper": "Powered by Hot Pepper Gourmet Web Service"
+    "hotpepper": "Powered by Hot Pepper Gourmet Web Service",
+    "affiliate": "部分連結包含聯盟廣告"
   },
   "meta": {
     "title": "今天吃什麼？ - 在日本尋找附近的餐廳",

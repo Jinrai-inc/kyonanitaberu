@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
+import Script from "next/script";
 import { locales } from "@/i18n/config";
 import AuthProvider from "@/components/AuthProvider";
 
@@ -93,6 +94,10 @@ export default async function LocaleLayout({ children, params }: Props) {
             {children}
           </NextIntlClientProvider>
         </AuthProvider>
+        <Script
+          src="//dalr.valuecommerce.com/litXXXXXXXXXX"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
