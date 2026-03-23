@@ -29,12 +29,12 @@ function extractArea(address: string): string {
 
 function buildReservationLinks(shop: Place) {
   const area = extractArea(shop.address);
-  const q = encodeURIComponent(`${shop.name} ${area}`);
+  const nameAndArea = `${shop.name} ${area}`;
   return [
-    { label: "ホットペッパー", href: `https://www.hotpepper.jp/SA11/?keyword=${q}` },
-    { label: "食べログ", href: `https://tabelog.com/rstLst/?vs=1&sk=${q}` },
-    { label: "一休", href: `https://restaurant.ikyu.com/search/?keyword=${q}` },
-    { label: "OZmall", href: `https://www.ozmall.co.jp/restaurant/search/?keyword=${q}` },
+    { label: "ホットペッパー", href: `https://www.google.com/search?q=${encodeURIComponent(`site:hotpepper.jp ${nameAndArea}`)}` },
+    { label: "食べログ", href: `https://www.google.com/search?q=${encodeURIComponent(`site:tabelog.com ${nameAndArea}`)}` },
+    { label: "一休", href: `https://www.google.com/search?q=${encodeURIComponent(`site:ikyu.com ${nameAndArea}`)}` },
+    { label: "OZmall", href: `https://www.google.com/search?q=${encodeURIComponent(`site:ozmall.co.jp ${nameAndArea}`)}` },
   ];
 }
 
