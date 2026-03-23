@@ -32,7 +32,7 @@ export default function AdMax() {
   return (
     <div
       ref={containerRef}
-      className="flex justify-center my-4"
+      className="flex justify-center my-4 overflow-hidden max-w-full"
     />
   );
 }

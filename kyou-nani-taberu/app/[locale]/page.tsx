@@ -297,7 +297,7 @@ export default function Home() {
           }}
         />
 
-        <div className="max-w-[460px] mx-auto px-4 pb-[110px]">
+        <div className="max-w-[460px] mx-auto px-4 pb-[110px] overflow-hidden">
           <LocationBar
             located={!!location}
             onLocate={handleLocate}
