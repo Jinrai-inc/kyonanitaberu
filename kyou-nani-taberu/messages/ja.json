@@ -89,14 +89,17 @@
     "spinning": "えらんでるよ…",
     "restart": "もう一回まわす",
     "start": "スタート",
-    "fab": "迷ったらコレ"
+    "fab": "迷ったらコレ",
+    "allGenres": "すべて",
+    "empty": "該当するお店がありません"
   },
   "map": {
     "show": "地図を表示",
     "hide": "地図を隠す"
   },
   "credit": {
-    "text": "店舗情報は Google Maps Platform、地図は Apple MapKit を利用しています"
+    "text": "店舗情報は Google Maps Platform、地図は Apple MapKit を利用しています",
+    "hotpepper": "Powered by ホットペッパーグルメ Webサービス"
   },
   "meta": {
     "title": "今日何食べる？ - 現在地から近くのレストランを探そう",

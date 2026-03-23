@@ -12,6 +12,7 @@ export default function AppFooter() {
       style={{ color: "var(--ink4)", borderTop: "1px solid var(--border)" }}
     >
       <p>{t("text")}</p>
+      <p className="mt-1">{t("hotpepper")}</p>
       <div className="flex justify-center gap-4 mt-2">
         <a href="/terms" className="underline" style={{ color: "var(--ink4)" }}>利用規約</a>
         <a href="https://jinrai.co.jp/privacypolicy/" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "var(--ink4)" }}>プライバシーポリシー</a>

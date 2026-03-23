@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import type { Place } from "@/types/place";
 import { XIcon, MapPin, Navigation } from "./icons/UiIcons";
@@ -30,13 +30,26 @@ export default function Roulette({ items, onClose }: RouletteProps) {
   const [result, setResult] = useState<Place | null>(null);
   const [idx, setIdx] = useState(0);
   const [hotpepperUrl, setHotpepperUrl] = useState<string | null>(null);
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const t = useTranslations("roulette");
   const tCard = useTranslations("card");
   const tGenre = useTranslations("genre");
 
+  // Get available genres from items
+  const availableGenres = useMemo(() => {
+    const genres = new Set(items.map((item) => item.genre));
+    return Array.from(genres).sort();
+  }, [items]);
+
+  // Filter items by selected genre
+  const filteredItems = useMemo(() => {
+    if (!selectedGenre) return items;
+    return items.filter((item) => item.genre === selectedGenre);
+  }, [items, selectedGenre]);
+
   const spin = useCallback(() => {
-    if (spinning || !items.length) return;
+    if (spinning || !filteredItems.length) return;
     setSpinning(true);
     setResult(null);
     setHotpepperUrl(null);
@@ -47,11 +60,11 @@ export default function Roulette({ items, onClose }: RouletteProps) {
 
     const tick = () => {
       count++;
-      setIdx((p) => (p + 1) % items.length);
+      setIdx((p) => (p + 1) % filteredItems.length);
 
       if (count >= total) {
         if (timerRef.current) clearInterval(timerRef.current);
-        setResult(items[Math.floor(Math.random() * items.length)]);
+        setResult(filteredItems[Math.floor(Math.random() * filteredItems.length)]);
         setSpinning(false);
         return;
       }
@@ -64,7 +77,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
     };
 
     timerRef.current = setInterval(tick, speed);
-  }, [spinning, items]);
+  }, [spinning, filteredItems]);
 
   useEffect(() => {
     return () => {
@@ -85,7 +98,7 @@ export default function Roulette({ items, onClose }: RouletteProps) {
       .catch(() => {});
   }, [result]);
 
-  const current = items[idx % items.length];
+  const current = filteredItems[idx % filteredItems.length];
   const display = result || current;
 
   const gUrl = result
@@ -116,6 +129,8 @@ export default function Roulette({ items, onClose }: RouletteProps) {
           borderRadius: 24,
           padding: "32px 24px 24px",
           boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+          maxHeight: "90vh",
+          overflowY: "auto",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -133,6 +148,45 @@ export default function Roulette({ items, onClose }: RouletteProps) {
           {t("title")}
         </h2>
 
+        {/* Genre filter chips */}
+        {availableGenres.length > 1 && (
+          <div className="flex flex-wrap gap-[5px] justify-center mt-3">
+            <button
+              onClick={() => { setSelectedGenre(null); setResult(null); }}
+              className="border-none cursor-pointer transition-all duration-200"
+              style={{
+                padding: "4px 10px",
+                borderRadius: 14,
+                fontSize: 10.5,
+                fontWeight: selectedGenre === null ? 700 : 500,
+                fontFamily: "var(--font-body)",
+                background: selectedGenre === null ? "var(--accent)" : "var(--bg)",
+                color: selectedGenre === null ? "#fff" : "var(--ink3)",
+              }}
+            >
+              {t("allGenres")}
+            </button>
+            {availableGenres.map((genre) => (
+              <button
+                key={genre}
+                onClick={() => { setSelectedGenre(genre === selectedGenre ? null : genre); setResult(null); }}
+                className="border-none cursor-pointer transition-all duration-200"
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 14,
+                  fontSize: 10.5,
+                  fontWeight: selectedGenre === genre ? 700 : 500,
+                  fontFamily: "var(--font-body)",
+                  background: selectedGenre === genre ? "var(--accent)" : "var(--bg)",
+                  color: selectedGenre === genre ? "#fff" : "var(--ink3)",
+                }}
+              >
+                {getGenreLabel(genre)}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Display area */}
         <div
           className={`flex items-center justify-center my-5 ${spinning ? "animate-wobble" : ""}`}
@@ -146,7 +200,9 @@ export default function Roulette({ items, onClose }: RouletteProps) {
         >
           {!result && !spinning && (
             <span className="text-[13px]" style={{ color: "var(--ink4)" }}>
-              {t("idle")}
+              {filteredItems.length === 0
+                ? t("empty")
+                : t("idle")}
             </span>
           )}
 
@@ -255,17 +311,17 @@ export default function Roulette({ items, onClose }: RouletteProps) {
 
         <button
           onClick={spin}
-          disabled={spinning || !items.length}
+          disabled={spinning || !filteredItems.length}
           className="w-full border-none cursor-pointer transition-all duration-300 hover:scale-[1.02]"
           style={{
             padding: 14,
             borderRadius: 50,
-            background: spinning ? "var(--ink4)" : "var(--accent)",
+            background: spinning || !filteredItems.length ? "var(--ink4)" : "var(--accent)",
             color: "#fff",
             fontSize: 15,
             fontWeight: 800,
             fontFamily: "var(--font-body)",
-            boxShadow: spinning ? "none" : "0 4px 16px var(--accent-glow)",
+            boxShadow: spinning || !filteredItems.length ? "none" : "0 4px 16px var(--accent-glow)",
           }}
         >
           {spinning ? t("spinning") : result ? t("restart") : t("start")}

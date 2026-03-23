@@ -89,14 +89,17 @@
     "spinning": "Choosing...",
     "restart": "Spin again",
     "start": "Start",
-    "fab": "Can't decide?"
+    "fab": "Can't decide?",
+    "allGenres": "All",
+    "empty": "No matching restaurants"
   },
   "map": {
     "show": "Show map",
     "hide": "Hide map"
   },
   "credit": {
-    "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit."
+    "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit.",
+    "hotpepper": "Powered by Hot Pepper Gourmet Web Service"
   },
   "meta": {
     "title": "What to Eat Today? - Find restaurants near you in Japan",

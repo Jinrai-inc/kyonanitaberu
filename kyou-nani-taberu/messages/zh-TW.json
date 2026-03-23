@@ -89,14 +89,17 @@
     "spinning": "選擇中…",
     "restart": "再轉一次",
     "start": "開始",
-    "fab": "選不了？"
+    "fab": "選不了？",
+    "allGenres": "全部",
+    "empty": "沒有符合條件的餐廳"
   },
   "map": {
     "show": "顯示地圖",
     "hide": "隱藏地圖"
   },
   "credit": {
-    "text": "餐廳資訊由 Google Maps Platform 提供，地圖由 Apple MapKit 提供"
+    "text": "餐廳資訊由 Google Maps Platform 提供，地圖由 Apple MapKit 提供",
+    "hotpepper": "Powered by Hot Pepper Gourmet Web Service"
   },
   "meta": {
     "title": "今天吃什麼？ - 在日本尋找附近的餐廳",
