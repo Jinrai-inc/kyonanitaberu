@@ -62,6 +62,15 @@ export default async function LocaleLayout({ children, params }: Props) {
           href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap"
           rel="stylesheet"
         />
+        {process.env.NEXT_PUBLIC_APPLE_MAPKIT_TOKEN && (
+          <script
+            src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js"
+            crossOrigin="anonymous"
+            async
+            data-callback="initMapKit"
+            data-token={process.env.NEXT_PUBLIC_APPLE_MAPKIT_TOKEN}
+          />
+        )}
       </head>
       <body style={{ fontFamily: "'M PLUS Rounded 1c', sans-serif" }}>
         <NextIntlClientProvider messages={messages}>

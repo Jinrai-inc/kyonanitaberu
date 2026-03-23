@@ -86,6 +86,10 @@
     "start": "Start",
     "fab": "Can't decide?"
   },
+  "map": {
+    "show": "Show map",
+    "hide": "Hide map"
+  },
   "credit": {
     "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit."
   },

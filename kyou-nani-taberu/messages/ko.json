@@ -86,6 +86,10 @@
     "start": "시작",
     "fab": "못 고르겠어?"
   },
+  "map": {
+    "show": "지도 표시",
+    "hide": "지도 숨기기"
+  },
   "credit": {
     "text": "매장 정보: Google Maps Platform, 지도: Apple MapKit"
   },

@@ -18,6 +18,8 @@ import GenreFilter from "@/components/GenreFilter";
 import ShopList from "@/components/ShopList";
 import Roulette from "@/components/Roulette";
 import Fab from "@/components/Fab";
+import MapSection from "@/components/map/MapSection";
+import { calcRadius } from "@/lib/radiusCalc";
 
 export default function Home() {
   const locale = useLocale();
@@ -93,6 +95,11 @@ export default function Home() {
 
           {located && (
             <>
+              <MapSection
+                center={{ lat: 35.4660, lng: 139.6190 }}
+                places={filteredShops}
+                radius={calcRadius(mode, maxTime)}
+              />
               <TransportSelector mode={mode} onChange={setMode} />
               <TimeSelector maxTime={maxTime} onChange={setMaxTime} />
               <NowOpenToggle
