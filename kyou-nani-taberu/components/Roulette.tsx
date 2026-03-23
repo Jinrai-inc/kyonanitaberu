@@ -6,6 +6,7 @@ import type { Place } from "@/types/place";
 import { XIcon, MapPin, Navigation } from "./icons/UiIcons";
 import { GenreIcon } from "./icons/GenreIcons";
 import { PRICE_LABEL } from "@/lib/genreMap";
+import { playTick, playResult } from "@/lib/sounds";
 import Stars from "./Stars";
 
 interface RouletteProps {
@@ -47,11 +48,13 @@ export default function Roulette({ items, onClose }: RouletteProps) {
     const tick = () => {
       count++;
       setIdx((p) => (p + 1) % filteredItems.length);
+      playTick();
 
       if (count >= total) {
         if (timerRef.current) clearInterval(timerRef.current);
         setResult(filteredItems[Math.floor(Math.random() * filteredItems.length)]);
         setSpinning(false);
+        playResult();
         return;
       }
 
