@@ -67,7 +67,7 @@ export default function ShopCard({ shop, mode, delay, locale }: ShopCardProps) {
           <div className="flex justify-between items-center gap-2">
             <h3
               className="text-[14.5px] font-semibold truncate"
-              style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+              style={{ fontFamily: "var(--font-body)", color: "var(--ink)" }}
             >
               {shop.name}
             </h3>

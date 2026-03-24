@@ -28,7 +28,7 @@ export default function ShopList({ shops, mode, sortBy, onSortChange, onlyOpen, 
             style={{
               color: "var(--accent)",
               fontSize: 22,
-              fontFamily: "var(--font-display)",
+              fontFamily: "var(--font-body)",
               marginRight: 2,
             }}
           >
