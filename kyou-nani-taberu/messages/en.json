@@ -107,8 +107,79 @@
   "credit": {
     "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit."
   },
+  "header": {
+    "login": "Login"
+  },
+  "footer": {
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "company": "About Us",
+    "guide": "How to Use",
+    "faq": "FAQ",
+    "about": "About This App",
+    "ad": "Some links contain affiliate advertising"
+  },
+  "guide": {
+    "title": "How to Use \"What to Eat Today?\"",
+    "updated": "Last updated: March 2026",
+    "intro": "Find a great restaurant nearby in just 3 steps.",
+    "step1title": "Step 1: Get Your Location",
+    "step1text": "Tap the \"Find restaurants near me\" button at the top to get your GPS location. Even without GPS access, we show popular restaurants near Tokyo Station by default.",
+    "step2title": "Step 2: Choose Transport & Time",
+    "step2text": "Select from walking, cycling, or driving, then set your travel time limit (5, 10, 15 minutes, etc.). Only restaurants reachable within your chosen time will be shown.",
+    "step3title": "Step 3: Filter by Cuisine",
+    "step3text": "Choose from 17+ cuisine types including Japanese, Ramen, Italian, Café, and more. You can select multiple cuisines at once.",
+    "step4title": "Step 4: Pick a Restaurant",
+    "step4text": "Browse restaurants by Google Maps star ratings and review counts. Tap a card to see address, hours, phone number, and other details.",
+    "rouletteTitle": "Can't Decide? Try the Roulette!",
+    "rouletteText": "When you just can't choose, tap the \"Can't decide?\" button in the bottom right. The roulette will randomly pick a restaurant for you.",
+    "langTitle": "Supported Languages",
+    "langText": "Available in 5 languages: Japanese, English, Simplified Chinese, Traditional Chinese, and Korean. Switch languages using the button in the top right.",
+    "featureTitle": "What Makes This App Special",
+    "feature1": "The only app that lets you search by transport mode and travel time",
+    "feature2": "Can't decide? The roulette picks for you instantly",
+    "feature3": "Available in 5 languages for international visitors to Japan"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "updated": "Last updated: March 2026",
+    "intro": "Having trouble? Check here for answers.",
+    "q1": "I can't get my location",
+    "a1": "Please enable location services in your browser settings. On iPhone, go to Settings > Privacy > Location Services. On Android, go to Settings > Location. Even without GPS, we display popular restaurants near Tokyo Station by default.",
+    "q2": "Is the restaurant information accurate?",
+    "a2": "Restaurant data comes from Google Maps Platform. Business hours and holidays are based on information registered on Google Maps, but may not reflect temporary closures. We recommend confirming directly with the restaurant.",
+    "q3": "What cuisines are supported?",
+    "a3": "We support 17+ cuisine types including Japanese, Izakaya, Ramen, Café, Italian, Yakiniku, Chinese, Bar, Sushi, Curry, Western, Korean, French, Thai, Mexican, Okonomiyaki, and Creative cuisine.",
+    "q4": "How does the 'Open now' filter work?",
+    "a4": "We check Google Maps Platform business hours against the current time. Restaurants without registered hours will show as 'Unknown'.",
+    "q5": "What languages are supported?",
+    "a5": "Japanese, English, Simplified Chinese, Traditional Chinese, and Korean — 5 languages total. Perfect for international visitors to Japan.",
+    "q6": "How does the roulette choose?",
+    "a6": "It randomly selects one restaurant from the current filtered results (transport, time, cuisine, and open-now filters all apply).",
+    "q7": "Is this app free?",
+    "a7": "Yes, all features are completely free to use.",
+    "q8": "Do I need to install an app?",
+    "a8": "No, it works directly in your web browser. No installation needed — accessible from both smartphones and computers."
+  },
+  "about": {
+    "title": "About \"What to Eat Today?\"",
+    "updated": "Last updated: March 2026",
+    "conceptTitle": "Concept",
+    "conceptText": "\"What to Eat Today?\" is a restaurant search service for anyone who struggles to decide where to eat. \"What should I have for lunch?\" \"Where should we go for drinks tonight?\" We help you solve these everyday dilemmas in seconds.",
+    "featureTitle": "Features",
+    "feature1": "Filter by distance and travel time from your current location",
+    "feature2": "Choose trusted restaurants by Google Maps star ratings",
+    "feature3": "Search with 17+ cuisine filters to match your preferences",
+    "feature4": "Show only currently open restaurants with one tap",
+    "feature5": "Roulette feature for the truly indecisive",
+    "feature6": "Available in 5 languages: Japanese, English, Chinese, Korean",
+    "visitorTitle": "For International Visitors",
+    "visitorText": "We support 5 languages to help travelers visiting Japan find delicious restaurants with ease.",
+    "operatorTitle": "Operator",
+    "operator": "Operated by Jinrai Co., Ltd."
+  },
   "meta": {
     "title": "What to Eat Today? - Find restaurants near you in Japan",
-    "description": "Find nearby restaurants in seconds. Can't decide? Let the roulette choose for you."
+    "description": "Find nearby restaurants in Japan using GPS. Filter by rating, cuisine, and open hours. Can't decide? Try the roulette! Available in 5 languages."
   }
 }
