@@ -7,16 +7,20 @@ const nextConfig: NextConfig = {
   async rewrites() {
     // WordPress on お名前.com server — update WORDPRESS_URL in .env
     const wpUrl = process.env.WORDPRESS_URL || "https://media.kyou-nani-taberu.app";
-    return [
-      {
-        source: "/media",
-        destination: `${wpUrl}/`,
-      },
-      {
-        source: "/media/:path*",
-        destination: `${wpUrl}/:path*`,
-      },
-    ];
+    return {
+      beforeFiles: [
+        {
+          source: "/media",
+          destination: `${wpUrl}/`,
+        },
+        {
+          source: "/media/:path*",
+          destination: `${wpUrl}/:path*`,
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 
