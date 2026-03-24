@@ -107,6 +107,10 @@
   "credit": {
     "text": "店舗情報は Google Maps Platform、地図は Apple MapKit を利用しています"
   },
+  "column": {
+    "title": "おすすめコラム",
+    "more": "コラムをもっと見る"
+  },
   "header": {
     "login": "ログイン"
   },

@@ -107,6 +107,10 @@
   "credit": {
     "text": "Restaurant data by Google Maps Platform. Map by Apple MapKit."
   },
+  "column": {
+    "title": "Recommended Articles",
+    "more": "Read more articles"
+  },
   "header": {
     "login": "Login"
   },

@@ -107,6 +107,10 @@
   "credit": {
     "text": "매장 정보: Google Maps Platform, 지도: Apple MapKit"
   },
+  "column": {
+    "title": "추천 칼럼",
+    "more": "칼럼 더보기"
+  },
   "header": {
     "login": "로그인"
   },

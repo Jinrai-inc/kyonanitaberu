@@ -107,6 +107,10 @@
   "credit": {
     "text": "餐廳資訊由 Google Maps Platform 提供，地圖由 Apple MapKit 提供"
   },
+  "column": {
+    "title": "推薦專欄",
+    "more": "查看更多文章"
+  },
   "header": {
     "login": "登入"
   },

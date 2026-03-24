@@ -24,6 +24,7 @@ import SceneSelector from "@/components/SceneSelector";
 import type { SceneMode } from "@/components/SceneSelector";
 import MapSection from "@/components/map/MapSection";
 import LoginModal from "@/components/LoginModal";
+import ColumnBanner from "@/components/ColumnBanner";
 import { MapPin } from "@/components/icons/UiIcons";
 
 interface UserLocation {
@@ -295,6 +296,9 @@ export default function MainApp({ initialPlaces, defaultLocationName, defaultLat
                 <MapPin size={18} color="#fff" />
                 {tLoc("getLocation")}
               </button>
+
+              {/* おすすめコラム（WordPress REST API連携） */}
+              <ColumnBanner locale={locale} />
             </div>
           )}
 
