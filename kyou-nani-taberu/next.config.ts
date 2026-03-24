@@ -6,15 +6,15 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 const nextConfig: NextConfig = {
   async rewrites() {
     // WordPress on お名前.com server — update WORDPRESS_URL in .env
-    const wpUrl = process.env.WORDPRESS_URL || "https://wp.kyou-nani-taberu.app";
+    const wpUrl = process.env.WORDPRESS_URL || "https://media.kyou-nani-taberu.app";
     return [
       {
         source: "/media",
-        destination: `${wpUrl}/media`,
+        destination: `${wpUrl}/`,
       },
       {
         source: "/media/:path*",
-        destination: `${wpUrl}/media/:path*`,
+        destination: `${wpUrl}/:path*`,
       },
     ];
   },
