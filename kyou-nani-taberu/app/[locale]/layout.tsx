@@ -63,7 +63,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap"
           rel="stylesheet"
         />
         <script
@@ -81,7 +81,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           />
         )}
       </head>
-      <body style={{ fontFamily: "'M PLUS Rounded 1c', sans-serif" }}>
+      <body style={{ fontFamily: "'Zen Maru Gothic', sans-serif" }}>
         <AuthProvider>
           <NextIntlClientProvider messages={messages}>
             {children}
