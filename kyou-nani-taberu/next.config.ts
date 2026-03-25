@@ -11,11 +11,11 @@ const nextConfig: NextConfig = {
       beforeFiles: [
         {
           source: "/media",
-          destination: `${wpUrl}/`,
+          destination: `${wpUrl}/media`,
         },
         {
           source: "/media/:path*",
-          destination: `${wpUrl}/:path*`,
+          destination: `${wpUrl}/media/:path*`,
         },
       ],
       afterFiles: [],
