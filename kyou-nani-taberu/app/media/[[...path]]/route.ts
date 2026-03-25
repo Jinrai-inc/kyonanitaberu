@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
 
 async function proxy(request: NextRequest) {
   const url = new URL(request.url);
-  const destination = `http://${WP_IP}${url.pathname}${url.search}`;
+  // /media/foo → /foo, /media → /
+  const wpPath = url.pathname.replace(/^\/media/, "") || "/";
+  const destination = `http://${WP_IP}${wpPath}${url.search}`;
 
   const headers = new Headers(request.headers);
   headers.set("Host", WP_HOST);
