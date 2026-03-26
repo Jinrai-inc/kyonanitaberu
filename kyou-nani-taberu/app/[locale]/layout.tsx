@@ -27,6 +27,9 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    verification: {
+      google: "1SOQj5t0YZUQQBzMkJncrSmV69ze-GsBrmVNRJymRAE",
+    },
     alternates: {
       canonical: locale === "ja" ? baseUrl : `${baseUrl}/${locale}`,
       languages: {
