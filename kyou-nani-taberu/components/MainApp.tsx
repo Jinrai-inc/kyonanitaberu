@@ -256,6 +256,9 @@ export default function MainApp({ initialPlaces, defaultLocationName, defaultLat
           {/* Default location banner (before GPS) */}
           {!isUsingGPS && (
             <div className="my-4 animate-fadeUp">
+              {/* おすすめコラム（WordPress REST API連携） */}
+              <ColumnBanner locale={locale} />
+
               <div
                 className="flex items-center gap-2 mb-3"
                 style={{
@@ -269,9 +272,6 @@ export default function MainApp({ initialPlaces, defaultLocationName, defaultLat
                   {defaultLocationName}
                 </span>
               </div>
-
-              {/* おすすめコラム（WordPress REST API連携） */}
-              <ColumnBanner locale={locale} />
 
               <button
                 onClick={() => {
