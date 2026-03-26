@@ -270,6 +270,9 @@ export default function MainApp({ initialPlaces, defaultLocationName, defaultLat
                 </span>
               </div>
 
+              {/* おすすめコラム（WordPress REST API連携） */}
+              <ColumnBanner locale={locale} />
+
               <button
                 onClick={() => {
                   // Trigger GPS
@@ -296,9 +299,6 @@ export default function MainApp({ initialPlaces, defaultLocationName, defaultLat
                 <MapPin size={18} color="#fff" />
                 {tLoc("getLocation")}
               </button>
-
-              {/* おすすめコラム（WordPress REST API連携） */}
-              <ColumnBanner locale={locale} />
             </div>
           )}
 

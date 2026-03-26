@@ -91,13 +91,13 @@ export default function ColumnBanner({ locale }: ColumnBannerProps) {
               )}
               <div className="flex-1 min-w-0">
                 <p
-                  className="text-[12.5px] font-bold truncate"
+                  className="text-[12.5px] font-bold line-clamp-2"
                   style={{ color: "var(--ink)" }}
                   dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                 />
                 {excerpt && (
                   <p
-                    className="text-[10.5px] mt-[2px] truncate"
+                    className="text-[10.5px] mt-[2px] line-clamp-1"
                     style={{ color: "var(--ink3)" }}
                   >
                     {excerpt}
