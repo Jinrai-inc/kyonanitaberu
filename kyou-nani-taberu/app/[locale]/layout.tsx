@@ -68,6 +68,20 @@ export default async function LocaleLayout({ children, params }: Props) {
         />
         <script
           async
+          src="https://www.googletagmanager.com/gtag/js?id=G-97V44W3CCT"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-97V44W3CCT');
+            `,
+          }}
+        />
+        <script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2054790971615092"
           crossOrigin="anonymous"
         />
