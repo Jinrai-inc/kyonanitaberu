@@ -1,7 +1,21 @@
 {
+  "rewrites": [
+    {
+      "source": "/media/wp-json/:path*",
+      "destination": "https://media.kyou-nani-taberu.app/wp-json/:path*"
+    },
+    {
+      "source": "/media",
+      "destination": "https://media.kyou-nani-taberu.app/"
+    },
+    {
+      "source": "/media/:path*",
+      "destination": "https://media.kyou-nani-taberu.app/:path*"
+    }
+  ],
   "headers": [
     {
-      "source": "/media/(.*)",
+      "source": "/media/wp-json/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
@@ -9,11 +23,11 @@
         },
         {
           "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+          "value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization, X-WP-Nonce, X-Requested-With"
+          "value": "Content-Type,Authorization,X-WP-Nonce,X-Requested-With"
         },
         {
           "key": "Access-Control-Allow-Credentials",
