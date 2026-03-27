@@ -15,7 +15,7 @@
   ],
   "headers": [
     {
-      "source": "/media/wp-json/(.*)",
+      "source": "/media/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
