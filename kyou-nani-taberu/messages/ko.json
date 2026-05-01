@@ -15,6 +15,10 @@
     "termsLink": "이용약관",
     "privacyLink": "개인정보 처리방침"
   },
+  "maintenance": {
+    "title": "점검 중입니다",
+    "body": "맛집 데이터 제공이 일시적으로 중단되었습니다.\n불편을 드려 죄송합니다. 잠시만 기다려 주세요."
+  },
   "location": {
     "getLocation": "주변 맛집 검색",
     "locating": "위치 확인 중...",

@@ -15,6 +15,10 @@
     "termsLink": "使用條款",
     "privacyLink": "隱私政策"
   },
+  "maintenance": {
+    "title": "目前維護中",
+    "body": "餐廳資料暫時無法提供。\n造成您的不便，敬請見諒，請稍候。"
+  },
   "location": {
     "getLocation": "搜尋附近餐廳",
     "locating": "定位中...",

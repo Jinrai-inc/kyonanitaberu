@@ -15,6 +15,10 @@
     "termsLink": "Terms of Service",
     "privacyLink": "Privacy Policy"
   },
+  "maintenance": {
+    "title": "Under maintenance",
+    "body": "Restaurant data is temporarily unavailable.\nWe apologize for the inconvenience and appreciate your patience."
+  },
   "location": {
     "getLocation": "Find restaurants near me",
     "locating": "Locating...",

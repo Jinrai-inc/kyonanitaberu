@@ -38,6 +38,7 @@ interface MainAppProps {
   defaultLocationName: string;
   defaultLat: number;
   defaultLng: number;
+  maintenanceMode?: boolean;
 }
 
 // Generate a persistent guest ID
@@ -51,10 +52,11 @@ function getGuestId(): string {
   return id;
 }
 
-export default function MainApp({ initialPlaces, defaultLocationName, defaultLat, defaultLng }: MainAppProps) {
+export default function MainApp({ initialPlaces, defaultLocationName, defaultLat, defaultLng, maintenanceMode = false }: MainAppProps) {
   const { data: session, status } = useSession();
   const locale = useLocale();
   const tLoc = useTranslations("location");
+  const tMaint = useTranslations("maintenance");
   const t = useTranslations();
 
   // Auto-activate guest mode so app is usable immediately
@@ -228,6 +230,70 @@ export default function MainApp({ initialPlaces, defaultLocationName, defaultLat
   const mapCenter = isUsingGPS && location
     ? { lat: location.lat, lng: location.lng }
     : { lat: defaultLat, lng: defaultLng };
+
+  if (maintenanceMode) {
+    return (
+      <>
+        <div
+          className="min-h-screen"
+          style={{
+            fontFamily: "var(--font-body)",
+            color: "var(--ink)",
+            background: "var(--bg)",
+            backgroundImage:
+              "radial-gradient(ellipse at 15% 0%, rgba(201,85,62,0.04) 0%, transparent 55%), radial-gradient(ellipse at 85% 100%, rgba(90,158,111,0.04) 0%, transparent 50%)",
+          }}
+        >
+          <AppHeader
+            nickname={nickname}
+            isLoggedIn={status === "authenticated"}
+            onLogout={() => {
+              if (status === "authenticated") {
+                signOut();
+              }
+            }}
+            onLoginRequest={() => setShowLoginModal(true)}
+          />
+
+          <div className="max-w-[460px] mx-auto px-4 pb-[110px]">
+            <div
+              className="my-6 p-6 text-center animate-fadeUp"
+              style={{
+                background: "var(--accent-light)",
+                borderRadius: "var(--radius)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              <div className="flex justify-center mb-3">
+                <MapPin size={28} color="var(--accent)" />
+              </div>
+              <h2
+                className="text-base font-bold mb-2"
+                style={{ color: "var(--accent)" }}
+              >
+                {tMaint("title")}
+              </h2>
+              <p
+                className="text-xs whitespace-pre-line leading-relaxed"
+                style={{ color: "var(--ink4)" }}
+              >
+                {tMaint("body")}
+              </p>
+            </div>
+
+            <AppFooter />
+          </div>
+        </div>
+
+        {showLoginModal && (
+          <LoginModal
+            onClose={() => setShowLoginModal(false)}
+            onGuestLogin={handleGuestLogin}
+          />
+        )}
+      </>
+    );
+  }
 
   return (
     <>

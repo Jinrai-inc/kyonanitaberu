@@ -15,6 +15,10 @@
     "termsLink": "使用条款",
     "privacyLink": "隐私政策"
   },
+  "maintenance": {
+    "title": "正在维护中",
+    "body": "餐厅数据暂时无法提供。\n给您带来不便，敬请谅解，请稍候。"
+  },
   "location": {
     "getLocation": "搜索附近餐厅",
     "locating": "定位中...",
